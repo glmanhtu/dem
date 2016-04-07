@@ -10,8 +10,8 @@ Digital Elevation Models (**DEMs**) are 2D maps in which each point is associate
 Objectives
 -------------
 
-The main objective of this project is to implement a software able to : o Import DEM files from various formats
-                     
+The main objective of this project is to implement a software able to : 
+- Import DEM files from various formats
 - Visualize them in 3D (with rotations, translations and zooms along the axis)
 - Allow the user to resize or to crop them using boundary boxes
 - Create a support at its basis to transform it into a 3D object
