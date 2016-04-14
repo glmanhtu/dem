@@ -1,0 +1,20 @@
+The DIMAP stands for Digital Image Map. It is the format for SPOT products introduced for the SPOT 5 launch in May 2002 and developed with CNES.
+
+DIMAP format consist of two parts: image and a description of the image.
+
+
+Image
+
+It is described in GeoTIFF format, consisting of:
+
+    a TIFF part, the most widely used image format in the world.
+    and a Geo part, adding georeferencing information for the image file (coordinates in the upper left-hand corner of the image and pixel size) to the basic TIFF file and may also describe the map projection used and its corresponding geographic system.
+
+Metadata
+
+This is written in XML, allowing to create customized keywords with corresponding values. It can be linked to an XSL style sheet which sorts and does the HTML layout of the information contained in the XML file.
+
+Reference
+http://www.spotimage.fr/dimap/spec/documentation/refdoc.htm
+SPOT IMAGE - DIMAP http://www2.geo-airbusds.com/files/pmedia/public/r455_9_formatdimap_eng_sept2010.pdf
+http://www.geo-airbusds.com/en/196-the-dimap-format
