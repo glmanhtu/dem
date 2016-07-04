@@ -80,18 +80,14 @@ void GLWidget::setDEMObject(GDALDataset *ds)
         // Fetch the band
         GDALRasterBand* band = pDataset->GetRasterBand(i);
         std::vector<float> band_data(cols*rows);
-        float* data = new float[cols*rows];
-        for (int i=0; i< rows; i++) {
-            std::vector<float> piece(cols);
-            // Read the data
-            band->RasterIO( GF_Read, 0, i,
-                            cols, 1,
-                            piece.data(),
-                            cols, 1,
-                            GDT_Float32,
-                            0, 0);
-            band_data.insert(band_data.end(), piece.begin(), piece.end());
-        }
+
+        // Read the data
+        band->RasterIO( GF_Read, 0, 0,
+                        cols, rows,
+                        band_data.data(),
+                        cols, rows,
+                        GDT_Float32,
+                        0, 0);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, cols, rows, 0, GL_RGBA, GL_UNSIGNED_BYTE, band_data.data());
     }
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
@@ -102,6 +98,7 @@ void GLWidget::setDEMObject(GDALDataset *ds)
 void GLWidget::initializeGL()
 {
     if (pDataset != NULL) {
+
 
     }
 }
