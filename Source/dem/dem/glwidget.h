@@ -62,7 +62,6 @@ public slots:
     void animate();
 
 protected:
-//    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
     void initializeGL() Q_DECL_OVERRIDE;
     void paintGL() Q_DECL_OVERRIDE;
     void resizeGL(int width, int height) Q_DECL_OVERRIDE;
