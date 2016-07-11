@@ -11,7 +11,7 @@ FilesModule::~FilesModule()
 
 bool FilesModule::hasAction()
 {
-    return false;
+    return true;
 }
 
 bool FilesModule::hasGraphics()
@@ -25,7 +25,7 @@ GraphicsComposite* FilesModule::getGraphic()
 }
 ActionInterface * FilesModule::getAction()
 {
-    return NULL;
+    return &fcontroller;
 }
 bool FilesModule::loadOnBoot()
 {

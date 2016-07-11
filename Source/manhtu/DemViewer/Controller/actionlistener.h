@@ -11,12 +11,13 @@ class ActionListener
 {
 private:
     vector<ActionInterface*> actions;
+    DemInterface* dem;
 public:
     ActionListener();
     ~ActionListener();
     void registerAction(ActionInterface*);
     ActionInterface* getAction(QString);
-
+    void setDemObject(DemInterface*);
 };
 
 #endif // ACTIONLISTENER_H

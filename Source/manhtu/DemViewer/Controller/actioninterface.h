@@ -14,7 +14,6 @@ public:
     virtual bool loadOnBoot() = 0;
     virtual bool requireDemObject() = 0;
     virtual void setDemObject(DemInterface*) = 0;
-    virtual ~ActionInterface() = 0;
 };
 
 #endif // ACTIONINTERFACE_H

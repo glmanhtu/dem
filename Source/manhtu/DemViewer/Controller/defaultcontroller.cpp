@@ -14,6 +14,7 @@ void DefaultController::initGraphics()
 void DefaultController::initActions()
 {
     actionListener = new ActionListener();
+    actionListener->setDemObject(demObject);
 }
 
 void DefaultController::initModules()
