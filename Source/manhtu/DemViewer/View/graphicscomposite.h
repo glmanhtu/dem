@@ -14,18 +14,21 @@ class GraphicsComposite
 protected:
     GraphicsComposite* graphicsMain;
     vector<GraphicsComposite*> graphics;
-    ActionListener actions;
+    ActionListener* actions;
     vector<Menu*> menus;
     const int GRAPHICS_ID = -1;
 
 public:
     void setMainGraphics(GraphicsComposite*);
-    void setActionPerform(ActionListener action);
+    GraphicsComposite* getMainGraphics();
+    void setActionPerform(ActionListener* action);
     ActionInterface* getAction(QString);
     void registerGraphics(GraphicsComposite* graphic);
     int addToGraphicsComponent();
     bool addMenu(QString menuName, QAction *action);
     bool registerMenu(QMenuBar*);
+    virtual void setSize(int width, int height);
+    virtual void updateGraphics();
     QAction* createQAction( QString name );
 
 public:

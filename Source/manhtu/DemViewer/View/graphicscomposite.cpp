@@ -6,6 +6,21 @@ void GraphicsComposite::setMainGraphics(GraphicsComposite * parent)
     graphicsMain = parent;
 }
 
+GraphicsComposite* GraphicsComposite::getMainGraphics()
+{
+    return graphicsMain;
+}
+
+void GraphicsComposite::setSize(int width, int height)
+{
+    graphicsMain->setSize(width, height);
+}
+
+void GraphicsComposite::updateGraphics()
+{
+    graphicsMain->updateGraphics();
+}
+
 QAction* GraphicsComposite::createQAction(QString name)
 {
     return new QAction(name, (Graphics*)graphicsMain);
@@ -23,7 +38,7 @@ void GraphicsComposite::registerGraphics(GraphicsComposite* graphic)
     }
 }
 
-void GraphicsComposite::setActionPerform(ActionListener action)
+void GraphicsComposite::setActionPerform(ActionListener* action)
 {
     actions = action;
 }
@@ -60,7 +75,7 @@ bool GraphicsComposite::addMenu(QString menuName, QAction *action)
 
 ActionInterface* GraphicsComposite::getAction(QString name)
 {
-    return this->actions.getAction(name);
+    return this->actions->getAction(name);
 }
 
 bool GraphicsComposite::registerMenu(QMenuBar * qMenuBar)

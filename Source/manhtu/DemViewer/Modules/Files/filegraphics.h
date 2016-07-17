@@ -10,7 +10,7 @@ private:
     const int GRAPHICS_ID = 0;
     FileController* fcontroller;
 public:
-    FileGraphics(FileController*);
+    FileGraphics();
     ~FileGraphics();
     // GraphicsComposite interface
 public:

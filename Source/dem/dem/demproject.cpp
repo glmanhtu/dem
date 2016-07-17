@@ -27,6 +27,7 @@ DemProject::DemProject(QWidget *parent) :
     cameraModeParametersPanel_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     cameraModeParametersPanel_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     cameraModeParametersPanel_->setWidget(openGL);
+
     layout->addWidget(cameraModeParametersPanel_);
     layout->setContentsMargins(0, 0, 0, 0);
     setLayout(layout);

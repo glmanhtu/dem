@@ -2,7 +2,7 @@
 
 FilesModule::FilesModule()
 {
-    fgraphics = new FileGraphics(&fcontroller);
+    fgraphics = new FileGraphics();
 }
 
 FilesModule::~FilesModule()

@@ -4,6 +4,8 @@
 #include <iostream>
 #include <QWidget>
 
+class GraphicsComposite;
+
 using namespace std;
 class ActionInterface
 {
@@ -14,6 +16,8 @@ public:
     virtual bool loadOnBoot() = 0;
     virtual bool requireDemObject() = 0;
     virtual void setDemObject(DemInterface*) = 0;
+    virtual DemInterface* getDemObject()=0;
+    virtual void setGraphics(GraphicsComposite*)=0;
 };
 
 #endif // ACTIONINTERFACE_H

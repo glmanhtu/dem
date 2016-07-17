@@ -1,10 +1,29 @@
 #include "View/graphics.h"
-#include "ui_widget.h"
+#include <QGridLayout>
+#include <QScrollArea>
 
-Graphics::Graphics(QWidget *parent) : QOpenGLWidget(parent), ui(new Ui::Graphics)
+Graphics::Graphics(QWidget *parent) : QOpenGLWidget(parent)
 {
-    ui->setupUi(this);  
     this->parent = parent;
+    setAutoFillBackground(false);
+}
+
+void Graphics::updateGraphics()
+{
+    update();
+    QScrollArea* scroll = (QScrollArea*)this->parentWidget();
+    scroll->update();
+}
+
+void Graphics::setSize(int width, int height)
+{
+    if (width < this->width()) {
+        width = this->width();
+    }
+    if (height < this->height()) {
+        height = this->height();
+    }
+    setFixedSize(width, height);
 }
 
 void Graphics::initial()
@@ -36,5 +55,5 @@ void Graphics::resizeGL(int width, int height)
 
 Graphics::~Graphics()
 {
-    delete ui;
+
 }

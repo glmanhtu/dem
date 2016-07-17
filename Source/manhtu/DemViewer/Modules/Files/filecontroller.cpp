@@ -1,13 +1,33 @@
 #include "filecontroller.h"
 #include <QDebug>
+#include <QFileDialog>
+#include "demobject.h"
+#include "gdal.h"
+#include "gdal_priv.h"
+#include "View/graphics.h"
 
 FileController::FileController(QObject *parent): QObject(parent)
 {
-
+    demObject = NULL;
 }
+
+void FileController::setGraphics(GraphicsComposite *graphics)
+{
+    this->graphics = graphics;
+}
+
 void FileController::openFile()
 {
-    qDebug() << "At Filecontroller::openFile";
+    QString fileName = QFileDialog::getOpenFileName((Graphics*)graphics->getMainGraphics(),
+        QString("Open Dem file"), "/home", QString("Image Files (*.dt0 *.dt1 *.dt2 *.tif)"));
+    GDALAllRegister();
+    QByteArray ba = fileName.toLatin1();
+    const char *c_fileName = ba.data();
+    GDALDataset* pFileDS = (GDALDataset*) GDALOpen(c_fileName, GA_ReadOnly);
+    demObject = new DemObject();
+    demObject->setDataSet(pFileDS);
+
+    graphics->updateGraphics();
 }
 
 void FileController::initAction()
@@ -20,7 +40,7 @@ void FileController::terminalAction()
 }
 QString FileController::getActionName()
 {
-    return QString("File.FileController");
+    return "File.FileController";
 }
 bool FileController::loadOnBoot()
 {
@@ -28,10 +48,15 @@ bool FileController::loadOnBoot()
 }
 bool FileController::requireDemObject()
 {
-    return false;
+    return true;
 }
-void FileController::setDemObject(DemInterface *)
+void FileController::setDemObject(DemInterface *dem)
 {
+    demObject = dem;
+}
 
+DemInterface* FileController::getDemObject()
+{
+    return demObject;
 }
 

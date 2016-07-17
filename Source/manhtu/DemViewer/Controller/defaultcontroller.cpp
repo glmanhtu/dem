@@ -2,13 +2,14 @@
 
 DefaultController::DefaultController()
 {
-
+    demObject = NULL;
 }
 
 void DefaultController::initGraphics()
 {
-    graphics.setActionPerform(*actionListener);
-    graphics.setMainGraphics(&graphics);
+    graphics = graphicsGlobal.getGraphicsWidget();
+    graphics->setActionPerform(actionListener);
+    graphics->setMainGraphics(graphics);
 }
 
 void DefaultController::initActions()
@@ -21,14 +22,14 @@ void DefaultController::initModules()
 {
     modules = new ModuleController();
     modules->setActionListener(actionListener);
-    modules->setGraphics(&graphics);
+    modules->setGraphics(graphics);
     modules->loadModules();
 }
 
 void DefaultController::start()
 {
-    graphics.initial();
-    graphics.show();
+    graphics->initial();
+    graphicsGlobal.show();
 }
 
 DefaultController::~DefaultController()

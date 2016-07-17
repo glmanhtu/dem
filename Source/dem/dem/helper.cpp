@@ -57,7 +57,7 @@ void Helper::paint(QPainter *painter, QPaintEvent *event, QImage img)
 //    painter->save();
 //    painter->setBrush(circleBrush);
 //    painter->setPen(circlePen);
-    painter->drawImage(0, 0, img);
+ //   painter->drawImage(0, 0, img);
 
 //    painter->rotate(800 * 0.030);
 

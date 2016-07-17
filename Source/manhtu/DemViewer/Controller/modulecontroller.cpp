@@ -1,5 +1,5 @@
 #include "modulecontroller.h"
-#include "../Modules/Files/filemodule.h"
+#include "Modules/Files/filemodule.h"
 
 ModuleController::ModuleController()
 {
@@ -11,8 +11,10 @@ void ModuleController::loadModules()
     for (int i=0; i<modules.size(); i++) {
         if (modules[i]->hasAction()) {
             registerAction(modules[i]->getAction());
+            modules[i]->getAction()->setGraphics(modules[i]->getGraphic());
         }
         if (modules[i]->hasGraphics()) {
+            modules[i]->getGraphic()->setActionPerform(actions);
             registerGraphics(modules[i]->getGraphic());
         }
         modules[i]->initModule();

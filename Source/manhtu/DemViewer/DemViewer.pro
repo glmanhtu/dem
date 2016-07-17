@@ -21,7 +21,10 @@ SOURCES += main.cpp\
     Controller/modulecontroller.cpp \
     Modules/Files/filemodule.cpp \
     Modules/Files/filegraphics.cpp \
-    Modules/Files/filecontroller.cpp
+    Modules/Files/filecontroller.cpp \
+    Modules/Files/demobject.cpp \
+    View/graphicsglobal.cpp \
+    View/scrollviewport.cpp
 
 HEADERS  += \
     Controller/defaultcontroller.h \
@@ -35,6 +38,22 @@ HEADERS  += \
     View/menu.h \
     Modules/Files/filemodule.h \
     Modules/Files/filegraphics.h \
-    Modules/Files/filecontroller.h
+    Modules/Files/filecontroller.h \
+    Modules/Files/demobject.h \
+    View/graphicsglobal.h \
+    View/scrollviewport.h
 
 FORMS    += widget.ui
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../../../../../usr/local/Cellar/gdal/1.11.3_1/lib/release/ -lgdal
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../../../../../usr/local/Cellar/gdal/1.11.3_1/lib/debug/ -lgdal
+else:unix: LIBS += -L$$PWD/../../../../../../../../usr/local/Cellar/gdal/1.11.3_1/lib/ -lgdal
+
+INCLUDEPATH += $$PWD/../../../../../../../../usr/local/Cellar/gdal/1.11.3_1/include
+DEPENDPATH += $$PWD/../../../../../../../../usr/local/Cellar/gdal/1.11.3_1/include
+
+win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../../../../../../../../usr/local/Cellar/gdal/1.11.3_1/lib/release/libgdal.a
+else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../../../../../../../../usr/local/Cellar/gdal/1.11.3_1/lib/debug/libgdal.a
+else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../../../../../../../../usr/local/Cellar/gdal/1.11.3_1/lib/release/gdal.lib
+else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../../../../../../../../usr/local/Cellar/gdal/1.11.3_1/lib/debug/gdal.lib
+else:unix: PRE_TARGETDEPS += $$PWD/../../../../../../../../usr/local/Cellar/gdal/1.11.3_1/lib/libgdal.a
