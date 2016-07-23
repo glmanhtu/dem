@@ -44,7 +44,7 @@
 #include <QOpenGLWidget>
 #include "gdal.h"
 #include "gdal_priv.h"
-#include <QtOpenGL/qgl.h>
+
 
 //! [0]
 class Helper;
@@ -52,7 +52,7 @@ class Helper;
 class GLWidget : public QOpenGLWidget
 {
     Q_OBJECT
-
+friend class ScrollViewport;
 public:
     GLWidget(Helper *helper, QWidget *parent);
     void setDEMObject(GDALDataset *);
@@ -72,6 +72,9 @@ private:
     GDALDataset *pDataset;
     char *rasterBlock;
     QImage img;
+    GLuint vertexbuffer;
+    GLuint m_posAttr;
+    GLuint m_colAttr;
     GLuint texture[1] ;
 
 };

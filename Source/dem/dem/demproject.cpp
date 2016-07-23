@@ -5,6 +5,7 @@
 #include "gdal.h"
 #include "gdal_priv.h"
 #include <QLabel>
+#include "scrollviewport.h"
 
 DemProject::DemProject(QWidget *parent) :
     QWidget(parent), ui(new Ui::DemProject)
@@ -22,13 +23,15 @@ DemProject::DemProject(QWidget *parent) :
 
     layout = new QGridLayout;
     layout->setHorizontalSpacing(0);
-    QScrollArea* cameraModeParametersPanel_ = new QScrollArea();
-    //cameraModeParametersPanel_->setFixedSize(900, 600);
-    cameraModeParametersPanel_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    cameraModeParametersPanel_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    cameraModeParametersPanel_->setWidget(openGL);
+//    ScrollViewport* scroll = new ScrollViewport(this);
+//    scroll->setViewport(openGL);
+//    QScrollArea* cameraModeParametersPanel_ = new QScrollArea();
+//    //cameraModeParametersPanel_->setFixedSize(900, 600);
+//    cameraModeParametersPanel_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+//    cameraModeParametersPanel_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+//    cameraModeParametersPanel_->setWidget(openGL);
 
-    layout->addWidget(cameraModeParametersPanel_);
+    layout->addWidget(openGL);
     layout->setContentsMargins(0, 0, 0, 0);
     setLayout(layout);
     ui->setupUi(this);

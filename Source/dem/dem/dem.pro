@@ -15,13 +15,18 @@ TEMPLATE = app
 SOURCES += main.cpp\
         demproject.cpp \
     helper.cpp \
-    glwidget.cpp
+    glwidget.cpp \
+    meshing.cpp \
+    scrollviewport.cpp
 
 HEADERS  += demproject.h \
     helper.h \
-    glwidget.h
+    glwidget.h \
+    meshing.h \
+    scrollviewport.h
 
 FORMS    += demproject.ui
+
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../../../../../usr/local/Cellar/gdal/1.11.3_1/lib/release/ -lgdal
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../../../../../usr/local/Cellar/gdal/1.11.3_1/lib/debug/ -lgdal
