@@ -44,7 +44,7 @@
 #include <QPainter>
 #include <QTimer>
 #include <QDebug>
-
+#include "meshing.h"
 //! [0]
 GLWidget::GLWidget(Helper *helper, QWidget *parent)
     : QOpenGLWidget(parent), helper(helper)
@@ -59,75 +59,168 @@ void GLWidget::animate()
 void GLWidget::setDEMObject(GDALDataset *ds)
 {
     this->pDataset = ds;
-    int rows, cols;
-    double transform[6];
-    cols = pDataset->GetRasterXSize();
-    rows = pDataset->GetRasterYSize();
-    setFixedSize(cols, rows);
-    int channels = pDataset->GetRasterCount();
-    pDataset->GetGeoTransform(transform);
 
-    glEnable(GL_CULL_FACE);
-    glShadeModel(GL_SMOOTH);
-    glEnable(GL_BLEND);
-    glEnable(GL_TEXTURE_2D);
 
-    glGenTextures(1, &texture[0]);
-    glBindTexture(GL_TEXTURE_2D, texture[0]);
+//    int rows, cols;
+//    double transform[6];
+//    cols = pDataset->GetRasterXSize();
+//    rows = pDataset->GetRasterYSize();
+//    setFixedSize(cols, rows);
+//    int channels = pDataset->GetRasterCount();
+//    pDataset->GetGeoTransform(transform);
 
-    for (int i = 1; i <= channels; ++i)
-    {
-        // Fetch the band
-        GDALRasterBand* band = pDataset->GetRasterBand(i);
-        std::vector<float> band_data(cols*rows);
+//    glGenTextures(1, &texture[0]);
+//    glBindTexture(GL_TEXTURE_2D, texture[0]);
 
-        // Read the data
-        band->RasterIO( GF_Read, 0, 0,
-                        cols, rows,
-                        band_data.data(),
-                        cols, rows,
-                        GDT_Float32,
-                        0, 0);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, cols, rows, 0, GL_RGBA, GL_UNSIGNED_BYTE, band_data.data());
-    }
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-    glBindTexture( GL_TEXTURE_2D, 0 );
+//    for (int i = 1; i <= channels; ++i)
+//    {
+//        // Fetch the band
+//        GDALRasterBand* band = pDataset->GetRasterBand(i);
+//        std::vector<float> band_data(cols*rows);
+
+//        // Read the data
+//        band->RasterIO( GF_Read, 0, 0,
+//                        cols, rows,
+//                        band_data.data(),
+//                        cols, rows,
+//                        GDT_Float32,
+//                        0, 0);
+//        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, cols, rows, 0, GL_RGBA, GL_UNSIGNED_BYTE, band_data.data());
+//    }
+//    std::vector<float> band_data = m->createVertexArray();
+//    glEnableClientState(GL_VERTEX_ARRAY);
+
+//    glVertexPointer(3, GL_FLOAT, 0, band_data.data());
+//    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, cols, rows, 0, GL_RGBA, GL_UNSIGNED_BYTE, band_data.data());
+//    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+//    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+//    glBindTexture( GL_TEXTURE_2D, 0 );
 }
+
+
 
 void GLWidget::initializeGL()
 {
-    if (pDataset != NULL) {
+    glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
+    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+    glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 
+    int WWIDTH = this->width();
+    int WHEIGHT = this->height();
 
-    }
+    glClearColor(0, 0, 0, 1);
+
+    glClearDepth(1.0f);
+
+    glViewport(0, 0, WWIDTH, WHEIGHT);
+
+    glMatrixMode(GL_PROJECTION);
+
+    glLoadIdentity();
+
+    glOrtho(0, WWIDTH, WHEIGHT, 0, 1, -1);
+
+    glMatrixMode(GL_MODELVIEW);
 }
 
 void GLWidget::paintGL()
 {
     if (pDataset != NULL) {
-        glClearColor( 0.0f, 0.0f, 0.0f, 0.0f);
-        glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT  );
-        glMatrixMode( GL_PROJECTION );
-        glLoadIdentity();
 
-        glShadeModel( GL_FLAT );
-        glEnable(GL_LIGHTING);
-        glEnable(GL_LIGHT0);
-        glEnable(GL_DEPTH_TEST);
-        glEnable(GL_TEXTURE_2D);
-        glColor3f(0.5, 0.5, 0);
-        glBindTexture(GL_TEXTURE_2D, texture[0]);
-        glBegin(GL_QUADS);
-        glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.0f, -1.0f);
-        glTexCoord2f(1.0f, 0.0f); glVertex2f(1.0f, -1.0f);
-        glTexCoord2f(1.0f, 1.0f); glVertex2f(1.0f, 1.0f);
-        glTexCoord2f(0.0f, 1.0f); glVertex2f(-1.0f, 1.0f);
-        glEnd();
-        glDisable(GL_TEXTURE_2D);
+//            GLfloat colors[] = {
+//                1.0f, 0.0f, 0.0f,
+//                0.0f, 1.0f, 0.0f,
+//                0.0f, 0.0f, 1.0f
+//            };
+//                Meshing* m = new Meshing(pDataset);
+//                std::vector<float> band_data = m->createVertexArray();
+//            glVertexAttribPointer(m_posAttr, 3, GL_FLOAT, GL_FALSE, 0, band_data.data());
+//            //glVertexAttribPointer(m_colAttr, 3, GL_FLOAT, GL_FALSE, 0, colors);
 
-        glFlush();
+//            glEnableVertexAttribArray(0);
+//            glEnableVertexAttribArray(1);
+
+//            glDrawArrays(GL_TRIANGLES, 0, 3);
+
+//            glDisableVertexAttribArray(1);
+//            glDisableVertexAttribArray(0);
+//        glShadeModel( GL_FLAT );
+//        glEnable(GL_LIGHTING);
+//        glEnable(GL_LIGHT0);
+//        glEnable(GL_DEPTH_TEST);
+//        glClearColor( 0.0f, 0.0f, 0.0f, 0.0f);
+//                glColor3f(0.5, 0.5, 0);
+//        glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT  );
+////        glMatrixMode( GL_PROJECTION );
+//        glLoadIdentity();
+        Meshing* m = new Meshing(pDataset);
+        std::vector<float> band_data = m->createVertexArray();
+//        glEnableClientState(GL_VERTEX_ARRAY);
+//        glVertexPointer(3, GL_FLOAT, 0, band_data.data());
+//        glDrawArrays(GL_TRIANGLES, 0, 3);
+//        glDisableClientState(GL_VERTEX_ARRAY);
+        glPointSize(5.0f);
+            glBegin(GL_POINTS);
+            for (int i=0; i<band_data.size(); i=i+3){
+                float x = band_data[i];
+                float y = band_data[i+1];
+                float z = band_data[i+2];
+                glVertex3f(x, y, z); // origin of the FIRST line
+            }
+            glEnd( );
+////        glEnable(GL_TEXTURE_2D);
+
+////        glBindTexture(GL_TEXTURE_2D, texture[0]);
+//        glBegin(GL_QUADS);
+//        glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.0f, -1.0f);
+//        glTexCoord2f(1.0f, 0.0f); glVertex2f(1.0f, -1.0f);
+//        glTexCoord2f(1.0f, 1.0f); glVertex2f(1.0f, 1.0f);
+//        glTexCoord2f(0.0f, 1.0f); glVertex2f(-1.0f, 1.0f);
+//        glEnd();
+//        glDisable(GL_TEXTURE_2D);
+
+//        glFlush();
+
+//        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     }
+
+
+//    glBegin(GL_TRIANGLES);
+//        glColor3f(1.0, 0.0, 0.0);
+//        glVertex3f(-0.5, -0.5, 0);
+//        glColor3f(0.0, 1.0, 0.0);
+//        glVertex3f( 0.5, -0.5, 0);
+//        glColor3f(0.0, 0.0, 1.0);
+//        glVertex3f( 0.0,  0.5, 0);
+//    glEnd();
+
+//    glBegin(GL_POINTS);
+//    glVertex3f(100.0f, 100.0f, -25.0f);
+//    glEnd( );
+
+    // next code will draw a line at starting and ending coordinates specified by glVertex3f
+//    glBegin(GL_LINES);
+//    glVertex3f(100.0f, 100.0f, 0.0f); // origin of the line
+//    glVertex3f(200.0f, 140.0f, 5.0f); // ending point of the line
+//    glEnd( );
+
+//    // the following code draws a triangle
+//    glBegin(GL_TRIANGLES);
+//    glVertex3f(100.0f, 100.0f, 0.0f);
+//    glVertex3f(150.0f, 100.0f, 0.0f);
+//    glVertex3f(125.0f, 50.0f, 0.0f);
+//    glEnd( );
+
+//    // this code will draw two lines "at a time" to save
+//    // the time it takes to call glBegin and glEnd.
+
+//    glBegin(GL_LINES);
+//    glVertex3f(100.0f, 100.0f, 0.0f); // origin of the FIRST line
+//    glVertex3f(200.0f, 140.0f, 5.0f); // ending point of the FIRST line
+//    glVertex3f(120.0f, 170.0f, 10.0f); // origin of the SECOND line
+//    glVertex3f(240.0f, 120.0f, 5.0f); // ending point of the SECOND line
+//    glEnd( );
 }
 
 void GLWidget::resizeGL(int w, int h)
