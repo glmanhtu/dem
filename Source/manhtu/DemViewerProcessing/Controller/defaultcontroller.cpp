@@ -1,14 +1,17 @@
 #include "defaultcontroller.h"
+#include "Model/demmodel.h"
 
 DefaultController::DefaultController()
 {
-    demObject = NULL;
+    demObject = new DemModel();
 }
 
 void DefaultController::initGraphics()
-{        
-    window.setActionPerform(actionListener);
-    window.setMainGraphics(&window);
+{
+    graphics = mainWindow.getGraphics();
+    graphics->setActionPerform(actionListener);
+    graphics->setMainGraphics(graphics);
+    graphics->setDemObject(demObject);
 }
 
 void DefaultController::initActions()
@@ -21,14 +24,14 @@ void DefaultController::initModules()
 {
     modules = new ModuleController();
     modules->setActionListener(actionListener);
-    modules->setGraphics(&window);
+    modules->setGraphics(graphics);
     modules->loadModules();
 }
 
 void DefaultController::start()
 {
-    window.initial();
-    window.show();
+    graphics->initial();
+    mainWindow.show();
 }
 
 DefaultController::~DefaultController()

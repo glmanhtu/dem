@@ -6,8 +6,6 @@
 #include "actioninterface.h"
 #include <QWidget>
 
-
-
 using namespace std;
 class ActionListener
 {
