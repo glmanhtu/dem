@@ -7,6 +7,7 @@
 #include "Controller/actionlistener.h"
 #include "menu.h"
 #include <functional>
+#include "vertex.h"
 
 using namespace std;
 class GraphicsComposite
@@ -17,6 +18,7 @@ protected:
     ActionListener* actions;
     vector<Menu*> menus;
     const int GRAPHICS_ID = -1;
+    DemInterface* demObject;
 
 public:
     void setMainGraphics(GraphicsComposite*);
@@ -30,6 +32,8 @@ public:
     virtual void setSize(int width, int height);
     virtual void updateGraphics();
     QAction* createQAction( QString name );
+    virtual void addVertex(Vertex vertex);
+    void setDemObject(DemInterface* dem);
 
 public:
     virtual void initial() = 0;

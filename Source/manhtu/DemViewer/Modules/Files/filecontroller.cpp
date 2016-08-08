@@ -1,14 +1,13 @@
 #include "filecontroller.h"
 #include <QDebug>
 #include <QFileDialog>
-#include "demobject.h"
 #include "gdal.h"
 #include "gdal_priv.h"
 #include "View/graphics.h"
 
 FileController::FileController(QObject *parent): QObject(parent)
-{
-    demObject = NULL;
+{    
+    hasFile = false;
 }
 
 void FileController::setGraphics(GraphicsComposite *graphics)
@@ -21,13 +20,17 @@ void FileController::openFile()
     QString fileName = QFileDialog::getOpenFileName((Graphics*)graphics->getMainGraphics(),
         QString("Open Dem file"), "/home", QString("Image Files (*.dt0 *.dt1 *.dt2 *.tif)"));
     GDALAllRegister();
+    hasFile = true;
     QByteArray ba = fileName.toLatin1();
     const char *c_fileName = ba.data();
-    GDALDataset* pFileDS = (GDALDataset*) GDALOpen(c_fileName, GA_ReadOnly);
-    demObject = new DemObject();
+    GDALDataset* pFileDS = (GDALDataset*) GDALOpen(c_fileName, GA_ReadOnly);    
     demObject->setDataSet(pFileDS);
+    graphics->updateGraphics();    
+}
 
-    graphics->updateGraphics();
+bool FileController::isOpenedFile()
+{
+    return hasFile;
 }
 
 void FileController::initAction()

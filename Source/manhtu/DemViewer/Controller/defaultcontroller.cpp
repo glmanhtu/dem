@@ -1,14 +1,17 @@
 #include "defaultcontroller.h"
+#include "Model/demobject.h"
 
 DefaultController::DefaultController()
 {
-    demObject = NULL;
+    demObject = new DemObject();
 }
 
 void DefaultController::initGraphics()
-{        
+{            
+    window.setDemObject(demObject);
     window.setActionPerform(actionListener);
     window.setMainGraphics(&window);
+    window.setSize(900, 600);
 }
 
 void DefaultController::initActions()

@@ -26,26 +26,14 @@ ColorRGBA getColor(unsigned char const * const p) {
     return *c;
 }
 
-void FileGraphics::addVertex(Vertex vertex)
-{
-    //data_vertex.push_back(vertex);
-    data_paint.push_back(vertex.position().x());
-    data_paint.push_back(vertex.position().y());
-    data_paint.push_back(vertex.position().z());
-    data_paint.push_back(vertex.color().x());
-    data_paint.push_back(vertex.color().y());
-    data_paint.push_back(vertex.color().z());
-}
-
 void FileGraphics::initializeGL()
 {
-    if (fcontroller->getDemObject() != NULL)
+    if (fcontroller->isOpenedFile())
     {
         int rows, cols;
         GDALDataset* pDataset = fcontroller->getDemObject()->getDataSet();
         cols = pDataset->GetRasterXSize();
-        rows = pDataset->GetRasterYSize();
-        setSize(900, 600);
+        rows = pDataset->GetRasterYSize();        
 
         // Fetch the band
         GDALRasterBand* band = pDataset->GetRasterBand(1);
@@ -192,13 +180,6 @@ void FileGraphics::initializeGL()
 
                 }
             }
-//        glGenVertexArrays(1, &VertexArrayID);
-//        glBindVertexArray(VertexArrayID);
-        glGenBuffers(1, &vertexbuffer);
-        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        qDebug() << "bind buffer. Err: "<< glGetError();
-        glBufferData(GL_ARRAY_BUFFER, data_paint.size()*sizeof(float), data_paint.data(), GL_STATIC_DRAW);
-        qDebug() << "bind Data. Error: " << glGetError();
     }
 }
 
@@ -224,32 +205,7 @@ float* getNormal(float* p1, float* p2, float* p3)
 }
 
 void FileGraphics::paintGL()
-{        
-//    glBegin(GL_TRIANGLES);
-//    for(int i=0 ;i< data_vertex.size(); i++) {
-//        Vertex v = data_vertex[i];
-//        glVertex3f(v.position().x(), v.position().y(), v.position().z());
-//        glColor3f(v.color().x(), v.color().y(), v.color().z());
-//    }
-//    glEnd();
-    if (data_paint.size() > 0) {
-        glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-        qDebug() << "bind when paint. Err: "<< glGetError();
-        glEnableClientState(GL_VERTEX_ARRAY);
-        glEnableClientState(GL_COLOR_ARRAY);
-
-//        glVertexPointer(3, GL_FLOAT, 6*sizeof(float), &data_paint[0]);
-//        glColorPointer(3, GL_FLOAT, 6*sizeof(float), &data_paint[3]);
-//        glDrawArrays(GL_TRIANGLES, 0, data_paint.size()/6);
-        glVertexPointer(3, GL_FLOAT, 6*sizeof(float), 0);
-        glColorPointer(3, GL_FLOAT, 6*sizeof(float), (GLvoid*)(3*sizeof(float)));
-        glDrawArrays(GL_TRIANGLES, 0, data_paint.size()/6);
-
-        glDisableClientState(GL_COLOR_ARRAY);
-        glDisableClientState(GL_VERTEX_ARRAY);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    }
+{            
 
 }
 void FileGraphics::resizeGL(int width, int height)

@@ -7,6 +7,7 @@ class DemObject : public DemInterface
 {
 private:
     GDALDataset* dataSet;
+    std::vector<float> data;
 public:
     DemObject();
 
@@ -14,6 +15,12 @@ public:
 public:
     void setDataSet(GDALDataset *) override;
     GDALDataset *getDataSet() override;
+
+    // DemInterface interface
+public:
+    void addVertex(Vertex ver);
+    float *getVertexArray();
+    int getNumberOfVertex();
 };
 
 #endif // DEMOBJECT_H

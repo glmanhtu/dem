@@ -4,19 +4,22 @@
 #include "graphicscomposite.h"
 #include "menu.h"
 #include <QOpenGLWidget>
+#include "vertex.h"
 
 class Graphics : public QOpenGLWidget, public GraphicsComposite
 {
     Q_OBJECT    
 private:
     const int GRAPHICS_ID = 0;
-    QWidget *parent;    
+    QWidget *parent;
+    unsigned int vbo;
 
 public:
     Graphics(QWidget *parent = 0);
     void initial() Q_DECL_OVERRIDE;
     void setSize(int, int) Q_DECL_OVERRIDE;
-    void updateGraphics() Q_DECL_OVERRIDE;    
+    void updateGraphics() Q_DECL_OVERRIDE;
+    void addVertex(Vertex vertex) Q_DECL_OVERRIDE;
     ~Graphics();
 
 protected:

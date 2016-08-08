@@ -21,8 +21,8 @@ SOURCES += main.cpp\
     Controller/modulecontroller.cpp \
     Modules/Files/filemodule.cpp \
     Modules/Files/filegraphics.cpp \
-    Modules/Files/filecontroller.cpp \
-    Modules/Files/demobject.cpp
+    Modules/Files/filecontroller.cpp \    
+    Model/demobject.cpp
 
 HEADERS  += \
     Controller/defaultcontroller.h \
@@ -37,8 +37,8 @@ HEADERS  += \
     Modules/Files/filemodule.h \
     Modules/Files/filegraphics.h \
     Modules/Files/filecontroller.h \
-    Modules/Files/demobject.h \
-    View/vertex.h
+    View/vertex.h \    
+    Model/demobject.h
 
 FORMS    += window.ui
 

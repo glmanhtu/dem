@@ -13,7 +13,7 @@ private:
     vector<float> data_paint;
     vector<Vertex> data_vertex;
     GLuint VertexArrayID,vertexbuffer;
-    void addVertex(Vertex vertex);
+    unsigned int vbo;
 
 public:
     FileGraphics();

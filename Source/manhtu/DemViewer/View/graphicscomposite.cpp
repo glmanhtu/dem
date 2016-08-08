@@ -6,6 +6,16 @@ void GraphicsComposite::setMainGraphics(GraphicsComposite * parent)
     graphicsMain = parent;
 }
 
+void GraphicsComposite::setDemObject(DemInterface *dem)
+{
+    demObject = dem;
+}
+
+void GraphicsComposite::addVertex(Vertex vertex)
+{
+    graphicsMain->addVertex(vertex);
+}
+
 GraphicsComposite* GraphicsComposite::getMainGraphics()
 {
     return graphicsMain;
