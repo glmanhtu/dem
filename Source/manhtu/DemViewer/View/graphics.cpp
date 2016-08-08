@@ -49,12 +49,11 @@ void Graphics::initializeGL()
     }
 
     int numbVertex = demObject->getNumberOfVertex();
-
-//    if (numbVertex > 0) {
-//        glGenBuffers(1, &vbo);
-//        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-//        glBufferData(GL_ARRAY_BUFFER, sizeof(float)*numbVertex, demObject->getVertexArray(), GL_STATIC_DRAW);
-//    }
+    if (numbVertex > 0) {
+        glGenBuffers(1, &vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float)*numbVertex, demObject->getVertexArray(), GL_STATIC_DRAW);
+    }
 }
 
 void Graphics::addVertex(Vertex vertex)
@@ -79,22 +78,22 @@ void Graphics::paintGL()
 
     if (numbVertex > 0) {
 
-//        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
         glEnableClientState(GL_VERTEX_ARRAY);
         glEnableClientState(GL_COLOR_ARRAY);
 
-        glVertexPointer(3, GL_FLOAT, 6*sizeof(float), demObject->getVertexArray());
-        glColorPointer(3, GL_FLOAT, 6*sizeof(float), &demObject->getVertexArray()[3]);
-        glDrawArrays(GL_TRIANGLES, 0, numbVertex/6);
-
-//        glVertexPointer(3, GL_FLOAT, 6*sizeof(float), 0);
-//        glColorPointer(3, GL_FLOAT, 6*sizeof(float), (GLvoid*)(3*sizeof(float)));
+//        glVertexPointer(3, GL_FLOAT, 6*sizeof(float), demObject->getVertexArray());
+//        glColorPointer(3, GL_FLOAT, 6*sizeof(float), &demObject->getVertexArray()[3]);
 //        glDrawArrays(GL_TRIANGLES, 0, numbVertex/6);
+
+        glVertexPointer(3, GL_FLOAT, 6*sizeof(float), 0);
+        glColorPointer(3, GL_FLOAT, 6*sizeof(float), (GLvoid*)(3*sizeof(float)));
+        glDrawArrays(GL_TRIANGLES, 0, numbVertex/6);
 
         glDisableClientState(GL_COLOR_ARRAY);
         glDisableClientState(GL_VERTEX_ARRAY);
-//        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
     }
 }
 

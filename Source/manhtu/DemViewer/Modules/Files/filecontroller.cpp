@@ -18,7 +18,7 @@ void FileController::setGraphics(GraphicsComposite *graphics)
 void FileController::openFile()
 {
     QString fileName = QFileDialog::getOpenFileName((Graphics*)graphics->getMainGraphics(),
-        QString("Open Dem file"), "/home", QString("Image Files (*.dt0 *.dt1 *.dt2 *.tif)"));
+        QString("Open Dem file"), "/home", QString("Image Files (*.dt0 *.dt1 *.dt2 *.tif *.ddf *.dem)"));
     GDALAllRegister();
     hasFile = true;
     QByteArray ba = fileName.toLatin1();

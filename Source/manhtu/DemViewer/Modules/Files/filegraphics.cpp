@@ -33,7 +33,7 @@ void FileGraphics::initializeGL()
         int rows, cols;
         GDALDataset* pDataset = fcontroller->getDemObject()->getDataSet();
         cols = pDataset->GetRasterXSize();
-        rows = pDataset->GetRasterYSize();        
+        rows = pDataset->GetRasterYSize();
 
         // Fetch the band
         GDALRasterBand* band = pDataset->GetRasterBand(1);
@@ -52,13 +52,14 @@ void FileGraphics::initializeGL()
             int centerY = rows/2;
             float maxZ = *std::max_element(band_data.begin(), band_data.end());
             ColorRGBA color;
-            for (int k = 0; k < rows; k++) {
+            int step = 2;
+            for (int k = 0; k < rows; k=k+step) {
                 posY = (float)(centerY - k)/centerY;
-                for (int j =0; j < cols; j++) {
+                for (int j =0; j < cols; j=j+step) {
 
                     posX = (float)(j - centerX)/centerX;
                     posZ = (float)band_data[k*rows + j] / maxZ;
-                    if (k > 0 && j > 0) {
+                    if (k - step >= 0 && j-step >= 0) {
                         color = getColor((unsigned char const *)&band_data[k*rows + j]);                        
                         addVertex(
                                     Vertex(
@@ -67,9 +68,9 @@ void FileGraphics::initializeGL()
                                     )
                                 );
 
-                        float nposY = (float)(centerY - (k -1))/centerY;
-                        float nposZ = (float)band_data[(k-1)*rows + j] / maxZ;
-                        color = getColor((unsigned char const *)&band_data[(k-1)*rows + j]);                        
+                        float nposY = (float)(centerY - (k -step))/centerY;
+                        float nposZ = (float)band_data[(k-step)*rows + j] / maxZ;
+                        color = getColor((unsigned char const *)&band_data[(k-step)*rows + j]);
                         addVertex(
                                     Vertex(
                                         QVector3D(posX, nposY, nposZ),
@@ -77,9 +78,9 @@ void FileGraphics::initializeGL()
                                     )
                                 );
 
-                        float nposX = (float)(j -1 - centerX)/centerX;
-                        nposZ = (float)band_data[k*rows + j -1] / maxZ;
-                        color = getColor((unsigned char const *)&band_data[k*rows + j - 1]);
+                        float nposX = (float)(j - step - centerX)/centerX;
+                        nposZ = (float)band_data[k*rows + j -step] / maxZ;
+                        color = getColor((unsigned char const *)&band_data[k*rows + j - step]);
                         addVertex(
                                     Vertex(
                                         QVector3D(nposX, posY, nposZ),
@@ -87,8 +88,8 @@ void FileGraphics::initializeGL()
                                     )
                                 );
                     }
-                    if (k < rows -1 && j < cols -1) {
-                        color = getColor((unsigned char const *)&band_data[k*rows + j]);                        
+                    if (k < rows -step && j < cols -step) {
+                        color = getColor((unsigned char const *)&band_data[k*rows + j]);
                         addVertex(
                                     Vertex(
                                         QVector3D(posX, posY, posZ),
@@ -96,9 +97,9 @@ void FileGraphics::initializeGL()
                                     )
                                 );
 
-                        float nposY = (float)(centerY - (k +1))/centerY;
-                        float nposZ = (float)band_data[(k+1)*rows + j] / maxZ;
-                        color = getColor((unsigned char const *)&band_data[(k+1)*rows + j]);
+                        float nposY = (float)(centerY - (k +step))/centerY;
+                        float nposZ = (float)band_data[(k+step)*rows + j] / maxZ;
+                        color = getColor((unsigned char const *)&band_data[(k+step)*rows + j]);
                         addVertex(
                                     Vertex(
                                         QVector3D(posX, nposY, nposZ),
@@ -106,9 +107,9 @@ void FileGraphics::initializeGL()
                                     )
                                 );
 
-                        float nposX = (float)(j +1 - centerX)/centerX;
-                        nposZ = (float)band_data[(k)*rows + j +1] / maxZ;
-                        color = getColor((unsigned char const *)&band_data[k*rows + j+1]);
+                        float nposX = (float)(j +step - centerX)/centerX;
+                        nposZ = (float)band_data[(k)*rows + j +step] / maxZ;
+                        color = getColor((unsigned char const *)&band_data[k*rows + j+step]);
                         addVertex(
                                     Vertex(
                                         QVector3D(nposX, posY, nposZ),
@@ -117,66 +118,66 @@ void FileGraphics::initializeGL()
                                 );
                     }
 
-                    if (k < rows -1 && j >0) {
-                        color = getColor((unsigned char const *)&band_data[k*rows + j]);
-                        glColor4d(color.r/255.0,color.g/255.0,color.b/255.0, color.a/255.0);
-                        addVertex(
-                                    Vertex(
-                                        QVector3D(posX, posY, posZ),
-                                        QVector3D(color.r/255.0, color.g/255.0, color.b/255.0)
-                                    )
-                                );
+//                    if (k < rows -1 && j >0) {
+//                        color = getColor((unsigned char const *)&band_data[k*rows + j]);
+//                        glColor4d(color.r/255.0,color.g/255.0,color.b/255.0, color.a/255.0);
+//                        addVertex(
+//                                    Vertex(
+//                                        QVector3D(posX, posY, posZ),
+//                                        QVector3D(color.r/255.0, color.g/255.0, color.b/255.0)
+//                                    )
+//                                );
 
-                        float nposY = (float)(centerY - (k +1))/centerY;
-                        float nposZ = (float)band_data[(k+1)*rows + j] / maxZ;
-                        color = getColor((unsigned char const *)&band_data[(k+1)*rows + j]);
-                        addVertex(
-                                    Vertex(
-                                        QVector3D(posX, nposY, nposZ),
-                                        QVector3D(color.r/255.0, color.g/255.0, color.b/255.0)
-                                    )
-                                );
+//                        float nposY = (float)(centerY - (k +1))/centerY;
+//                        float nposZ = (float)band_data[(k+1)*rows + j] / maxZ;
+//                        color = getColor((unsigned char const *)&band_data[(k+1)*rows + j]);
+//                        addVertex(
+//                                    Vertex(
+//                                        QVector3D(posX, nposY, nposZ),
+//                                        QVector3D(color.r/255.0, color.g/255.0, color.b/255.0)
+//                                    )
+//                                );
 
-                        float nposX = (float)(j -1 - centerX)/centerX;
-                        nposZ = (float)band_data[(k)*rows + j -1] / maxZ;
-                        color = getColor((unsigned char const *)&band_data[k*rows + j-1]);
-                        addVertex(
-                                    Vertex(
-                                        QVector3D(nposX, posY, nposZ),
-                                        QVector3D(color.r/255.0, color.g/255.0, color.b/255.0)
-                                    )
-                                );
-                    }
+//                        float nposX = (float)(j -1 - centerX)/centerX;
+//                        nposZ = (float)band_data[(k)*rows + j -1] / maxZ;
+//                        color = getColor((unsigned char const *)&band_data[k*rows + j-1]);
+//                        addVertex(
+//                                    Vertex(
+//                                        QVector3D(nposX, posY, nposZ),
+//                                        QVector3D(color.r/255.0, color.g/255.0, color.b/255.0)
+//                                    )
+//                                );
+//                    }
 
-                    if (k > 0 && j < cols -1) {
-                        color = getColor((unsigned char const *)&band_data[k*rows + j]);
-                        addVertex(
-                                                            Vertex(
-                                                                QVector3D(posX, posY, posZ),
-                                                                QVector3D(color.r/255.0, color.g/255.0, color.b/255.0)
-                                                            )
-                                                        );
+//                    if (k > 0 && j < cols -1) {
+//                        color = getColor((unsigned char const *)&band_data[k*rows + j]);
+//                        addVertex(
+//                                                            Vertex(
+//                                                                QVector3D(posX, posY, posZ),
+//                                                                QVector3D(color.r/255.0, color.g/255.0, color.b/255.0)
+//                                                            )
+//                                                        );
 
-                        float nposY = (float)(centerY - (k -1))/centerY;
-                        float nposZ = (float)band_data[(k-1)*rows + j] / maxZ;
-                        color = getColor((unsigned char const *)&band_data[(k-1)*rows + j]);
-                        addVertex(
-                                                            Vertex(
-                                                                QVector3D(posX, nposY, nposZ),
-                                                                QVector3D(color.r/255.0, color.g/255.0, color.b/255.0)
-                                                            )
-                                                        );
+//                        float nposY = (float)(centerY - (k -1))/centerY;
+//                        float nposZ = (float)band_data[(k-1)*rows + j] / maxZ;
+//                        color = getColor((unsigned char const *)&band_data[(k-1)*rows + j]);
+//                        addVertex(
+//                                                            Vertex(
+//                                                                QVector3D(posX, nposY, nposZ),
+//                                                                QVector3D(color.r/255.0, color.g/255.0, color.b/255.0)
+//                                                            )
+//                                                        );
 
-                        float nposX = (float)(j +1 - centerX)/centerX;
-                        nposZ = (float)band_data[(k)*rows + j +1] / maxZ;
-                        color = getColor((unsigned char const *)&band_data[k*rows + j+1]);
-                        addVertex(
-                                                            Vertex(
-                                                                QVector3D(nposX, posY, nposZ),
-                                                                QVector3D(color.r/255.0, color.g/255.0, color.b/255.0)
-                                                            )
-                                                        );
-                    }
+//                        float nposX = (float)(j +1 - centerX)/centerX;
+//                        nposZ = (float)band_data[(k)*rows + j +1] / maxZ;
+//                        color = getColor((unsigned char const *)&band_data[k*rows + j+1]);
+//                        addVertex(
+//                                                            Vertex(
+//                                                                QVector3D(nposX, posY, nposZ),
+//                                                                QVector3D(color.r/255.0, color.g/255.0, color.b/255.0)
+//                                                            )
+//                                                        );
+//                    }
 
                 }
             }
