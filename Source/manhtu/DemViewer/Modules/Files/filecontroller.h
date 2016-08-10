@@ -7,14 +7,13 @@
 class FileController : public QObject, public ActionInterface
 {
 Q_OBJECT
-public:
-    FileController(QObject *parent = 0);
+private:
     DemInterface* demObject;
     GraphicsComposite* graphics;
-    void openFile();
+    bool hasFile;
 
-    // ActionInterface interface
 public:
+    FileController(QObject *parent = 0);
     void initAction() override;
     void terminalAction() override;
     QString getActionName() override;
@@ -23,6 +22,8 @@ public:
     void setDemObject(DemInterface *) override;
     DemInterface* getDemObject() override;
     void setGraphics(GraphicsComposite*) override;
+    bool isOpenedFile();
+    void openFile();
 };
 
 #endif // FILECONTROLLER_H

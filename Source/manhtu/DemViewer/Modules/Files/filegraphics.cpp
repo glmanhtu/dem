@@ -3,7 +3,47 @@
 
 FileGraphics::FileGraphics()
 {
+    addColor(ColorRGBA(25,0,40), ColorRGBA(35,0,58), 4000);
+    addColor(ColorRGBA(35,0,58), ColorRGBA(20,0,75), 2000);
+    addColor(ColorRGBA(20,0,75), ColorRGBA(6,0,111), 2000);
+    addColor(ColorRGBA(6,0,111), ColorRGBA(0,19,156), 1000);
+    addColor(ColorRGBA(0,19,156), ColorRGBA(6,60,166), 1000);
+    addColor(ColorRGBA(6,60,166), ColorRGBA(21,100,171), 850);
+    addColor(ColorRGBA(21,100,171), ColorRGBA(51,147,201), 100);
+    addColor(ColorRGBA(51,147,201), ColorRGBA(71,183,190), 30);
+    addColor(ColorRGBA(71,183,190), ColorRGBA(103,186,191), 15);
+    addColor(ColorRGBA(103,186,191), ColorRGBA(131,193,196), 5);
+
+    addColor(ColorRGBA(31,83,54), ColorRGBA(26,103,37), 10);
+    addColor(ColorRGBA(26,103,37), ColorRGBA(181,171,88), 490);
+    addColor(ColorRGBA(181,171,88), ColorRGBA(145,57,9), 1500);
+    addColor(ColorRGBA(145,57,9), ColorRGBA(130,0,1), 1000);
+    addColor(ColorRGBA(130,0,1), ColorRGBA(91,85,85), 2000);
+    addColor(ColorRGBA(91,85,85), ColorRGBA(223,223,223), 2500);
+    addColor(ColorRGBA(223,223,223), ColorRGBA(255,255,255), 1500);
 }
+
+void FileGraphics::addColor(ColorRGBA color1, ColorRGBA color2, int step)
+{
+    float interval_R = (float)(color2.red() - color1.red()) / step;
+    float interval_G = (float)(color2.green() - color1.green()) / step;
+    float interval_B = (float)(color2.blue() - color1.blue()) / step;
+
+    float current_R = color1.red();
+    float current_G = color1.green();
+    float current_B = color1.blue();
+
+    data_colors.push_back(color1);
+    for (int i = 0; i <= step; i++)
+    {
+        current_R += interval_R;
+        current_G += interval_G;
+        current_B += interval_B;
+        data_colors.push_back(ColorRGBA(current_R, current_G, current_B));
+    }
+    data_colors.push_back(color2);
+}
+
 
 void FileGraphics::initial()
 {
@@ -17,37 +57,30 @@ FileGraphics::~FileGraphics()
 {
 }
 
+ColorRGBA FileGraphics::getColor(float height) {
+
+    ColorRGBA* c = new ColorRGBA();
+    ColorRGBA color = data_colors[height+11000];
+    c->r = color.red()/255;
+    c->g = color.green()/255;
+    c->b = color.blue()/255;
+    return *c;
+}
+
+float FileGraphics::getZCoordinate(float height) {
+    return (height/9000);
+}
+
 void FileGraphics::initializeGL()
 {
-
-}
-void FileGraphics::paintGL()
-{
-    if (fcontroller->getDemObject() != NULL)
+    if (fcontroller->isOpenedFile())
     {
         int rows, cols;
         GDALDataset* pDataset = fcontroller->getDemObject()->getDataSet();
         cols = pDataset->GetRasterXSize();
         rows = pDataset->GetRasterYSize();
-        setSize(cols, rows);
-
-        int WWIDTH = cols;
-        int WHEIGHT = rows;
-
-        glClearColor( 0.0f, 0.0f, 0.0f, 0.0f);
-        glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT  );
-
-        glClearDepth(1.0f);
-
-        glViewport(0, 0, WWIDTH, WHEIGHT);
-
-        glMatrixMode(GL_PROJECTION);
-
-        glLoadIdentity();
-
-        glOrtho(0, WWIDTH, WHEIGHT, 0, 1, -1);
-
-        glMatrixMode(GL_MODELVIEW);
+        double transform[6];
+        pDataset->GetGeoTransform(transform);
 
         // Fetch the band
         GDALRasterBand* band = pDataset->GetRasterBand(1);
@@ -60,57 +93,164 @@ void FileGraphics::paintGL()
                         cols, rows,
                         GDT_Float32,
                         0, 0);
-//            GLuint texture[1];
-//            glEnable(GL_CULL_FACE);
-//            glShadeModel(GL_SMOOTH);
-//            glEnable(GL_BLEND);
-//            glEnable(GL_TEXTURE_2D);
 
-//            glGenTextures(1, &texture[0]);
-//            glBindTexture(GL_TEXTURE_2D, texture[0]);
+            int centerX = cols/2;
+            float posX, posY = 0;
+            scale = getSize().width() / cols;
+            int centerY = rows/2;
+            ColorRGBA color;
+            maxZ = *std::max_element(band_data.begin(), band_data.end());
+            int step = 2;
+            for (int k = 0; k < rows; k=k+step) {
+                posY = (float)(centerY - k)/centerY;
+                for (int j =0; j < cols; j=j+step) {
 
-//            glTexImage2D(GL_TEXTURE_2D, 0, 4, cols, rows, 0, GL_RGBA, GL_UNSIGNED_BYTE, band_data.data());
-//            glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-//            glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-//            glBindTexture( GL_TEXTURE_2D, 0 );
-//            glClearColor( 0.0f, 0.0f, 0.0f, 0.0f);
-//            glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT  );
-//            glMatrixMode( GL_PROJECTION );
-//            glLoadIdentity();
+                    posX = (float)(j - centerX)/centerX;
+                    if (k - step >= 0 && j-step >= 0) {
+                        color = getColor(band_data[k*rows + j]);
+                        addVertex(
+                                    Vertex(
+                                        QVector3D(posX, posY, getZCoordinate(band_data[k*rows + j])),
+                                        QVector3D(color.r, color.g, color.b)
+                                    )
+                                );
 
-//            glShadeModel( GL_FLAT );
-//            glEnable(GL_LIGHTING);
-//            glEnable(GL_LIGHT0);
-//            glEnable(GL_DEPTH_TEST);
-//            glEnable(GL_TEXTURE_2D);
-//            glColor3f(0.5, 0.5, 0);
-//            glBindTexture(GL_TEXTURE_2D, texture[0]);
-//            glBegin(GL_QUADS);
-//            glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.0f, -1.0f);
-//            glTexCoord2f(1.0f, 0.0f); glVertex2f(1.0f, -1.0f);
-//            glTexCoord2f(1.0f, 1.0f); glVertex2f(1.0f, 1.0f);
-//            glTexCoord2f(0.0f, 1.0f); glVertex2f(-1.0f, 1.0f);
-//            glEnd();
-//            glDisable(GL_TEXTURE_2D);
+                        float nposY = (float)(centerY - (k -step))/centerY;
+                        color = getColor(band_data[(k-step)*rows + j]);
+                        addVertex(
+                                    Vertex(
+                                        QVector3D(posX, nposY, getZCoordinate(band_data[(k-step)*rows + j])),
+                                        QVector3D(color.r, color.g, color.b)
+                                    )
+                                );
 
-            glBegin(GL_POINTS);
+                        float nposX = (float)(j - step - centerX)/centerX;
+                        color = getColor(band_data[k*rows + j - step]);
+                        addVertex(
+                                    Vertex(
+                                        QVector3D(nposX, posY, getZCoordinate(band_data[k*rows + j - step])),
+                                        QVector3D(color.r, color.g, color.b)
+                                    )
+                                );
+                    }
+                    if (k < rows -step && j < cols -step) {
+                        color = getColor(band_data[k*rows + j]);
+                        addVertex(
+                                    Vertex(
+                                        QVector3D(posX, posY, getZCoordinate(band_data[k*rows + j])),
+                                        QVector3D(color.r, color.g, color.b)
+                                    )
+                                );
 
-            for (int k = 0; k < rows; k++) {
-                for (int j =0; j < cols; j++) {
-                    unsigned char const * const p = (unsigned char const *)&band_data.data()[k*rows + j];
-                    float r = p[0];
-                    float g = p[1];
-                    float b = p[2];
-                    float a = p[3];
+                        float nposY = (float)(centerY - (k +step))/centerY;
+                        color = getColor(band_data[(k+step)*rows + j]);
+                        addVertex(
+                                    Vertex(
+                                        QVector3D(posX, nposY, getZCoordinate(band_data[(k+step)*rows + j])),
+                                        QVector3D(color.r, color.g, color.b)
+                                    )
+                                );
 
-                    glColor4d(r/255.0,g/255.0,b/255.0, a/255.0);
-                    glVertex2f(j,k);
+                        float nposX = (float)(j +step - centerX)/centerX;
+                        color = getColor(band_data[k*rows + j+step]);
+                        addVertex(
+                                    Vertex(
+                                        QVector3D(nposX, posY, getZCoordinate(band_data[k*rows + j+step])),
+                                        QVector3D(color.r, color.g, color.b)
+                                    )
+                                );
+                    }
+
+//                    if (k < rows -1 && j >0) {
+//                        color = getColor(band_data[k*rows + j]);
+//                        glColor4d(color.r,color.g,color.b, color.a/255.0);
+//                        addVertex(
+//                                    Vertex(
+//                                        QVector3D(posX, posY, posZ),
+//                                        QVector3D(color.r, color.g, color.b)
+//                                    )
+//                                );
+
+//                        float nposY = (float)(centerY - (k +1))/centerY;
+//                        float nposZ = (float)band_data[(k+1)*rows + j] / maxZ;
+//                        color = getColor(band_data[(k+1)*rows + j]);
+//                        addVertex(
+//                                    Vertex(
+//                                        QVector3D(posX, nposY, nposZ),
+//                                        QVector3D(color.r, color.g, color.b)
+//                                    )
+//                                );
+
+//                        float nposX = (float)(j -1 - centerX)/centerX;
+//                        nposZ = (float)band_data[(k)*rows + j -1] / maxZ;
+//                        color = getColor(band_data[k*rows + j-1]);
+//                        addVertex(
+//                                    Vertex(
+//                                        QVector3D(nposX, posY, nposZ),
+//                                        QVector3D(color.r, color.g, color.b)
+//                                    )
+//                                );
+//                    }
+
+//                    if (k > 0 && j < cols -1) {
+//                        color = getColor(band_data[k*rows + j]);
+//                        addVertex(
+//                                                            Vertex(
+//                                                                QVector3D(posX, posY, posZ),
+//                                                                QVector3D(color.r, color.g, color.b)
+//                                                            )
+//                                                        );
+
+//                        float nposY = (float)(centerY - (k -1))/centerY;
+//                        float nposZ = (float)band_data[(k-1)*rows + j] / maxZ;
+//                        color = getColor(band_data[(k-1)*rows + j]);
+//                        addVertex(
+//                                                            Vertex(
+//                                                                QVector3D(posX, nposY, nposZ),
+//                                                                QVector3D(color.r, color.g, color.b)
+//                                                            )
+//                                                        );
+
+//                        float nposX = (float)(j +1 - centerX)/centerX;
+//                        nposZ = (float)band_data[(k)*rows + j +1] / maxZ;
+//                        color = getColor(band_data[k*rows + j+1]);
+//                        addVertex(
+//                                                            Vertex(
+//                                                                QVector3D(nposX, posY, nposZ),
+//                                                                QVector3D(color.r, color.g, color.b)
+//                                                            )
+//                                                        );
+//                    }
+
                 }
             }
-            glEnd( );
-
-        glFlush();
     }
+}
+
+float* getNormal(float* p1, float* p2, float* p3)
+{
+    float *u = new float[3];
+    u[0] = p2[0] - p1[0];
+    u[1] = p2[1] - p1[1];
+    u[2] = p2[2] - p1[2];
+
+    float*v = new float[3];
+    v[0] = p3[0] - p1[0];
+    v[1] = p3[1] - p1[1];
+    v[2] = p3[2] - p1[2];
+
+    float* result = new float[3];
+    result[0] = u[1] * v[2] - u[2] * v[1];
+    result[1] = u[2] * v[0] - u[0] * v[2];
+    result[2] = u[0] * v[1] - u[1] * v[0];
+    delete[] v;
+    delete[] u;
+    return result;
+}
+
+void FileGraphics::paintGL()
+{            
+
 }
 void FileGraphics::resizeGL(int width, int height)
 {
