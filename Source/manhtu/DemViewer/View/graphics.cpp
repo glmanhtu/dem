@@ -3,6 +3,11 @@
 #include <QDebug>
 #include <QOpenGLShaderProgram>
 
+QSize Graphics::getSize()
+{
+    return this->size();
+}
+
 Graphics::Graphics(QWidget *parent) : QOpenGLWidget(parent)
 {
     this->parent = parent;

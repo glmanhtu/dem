@@ -20,6 +20,7 @@ public:
     void setSize(int, int) Q_DECL_OVERRIDE;
     void updateGraphics() Q_DECL_OVERRIDE;
     void addVertex(Vertex vertex) Q_DECL_OVERRIDE;
+    QSize getSize() Q_DECL_OVERRIDE;
     ~Graphics();
 
 protected:

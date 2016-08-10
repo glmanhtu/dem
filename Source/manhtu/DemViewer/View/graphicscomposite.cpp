@@ -1,6 +1,11 @@
 #include "graphicscomposite.h"
 #include "graphics.h"
 
+QSize GraphicsComposite::getSize()
+{
+    return graphicsMain->getSize();
+}
+
 void GraphicsComposite::setMainGraphics(GraphicsComposite * parent)
 {
     graphicsMain = parent;

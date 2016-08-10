@@ -34,6 +34,7 @@ public:
     QAction* createQAction( QString name );
     virtual void addVertex(Vertex vertex);
     void setDemObject(DemInterface* dem);
+    virtual QSize getSize();
 
 public:
     virtual void initial() = 0;
