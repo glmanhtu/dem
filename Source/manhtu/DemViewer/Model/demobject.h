@@ -8,6 +8,8 @@ class DemObject : public DemInterface
 private:
     GDALDataset* dataSet;
     std::vector<float> data;
+    int cols, rows;
+    float maxH, minH;
 public:
     DemObject();
 
@@ -21,6 +23,25 @@ public:
     void addVertex(Vertex ver);
     float *getVertexArray();
     int getNumberOfVertex();
+
+    // DemInterface interface
+public:
+    int getCols();
+    int getRows();
+
+    // DemInterface interface
+public:
+    float maxHeight();
+    float minHeight();
+
+    // DemInterface interface
+public:
+    float setMaxHeight(float max);
+    float setMinHeight(float min);
+
+    // DemInterface interface
+public:
+    float heightScale(float height);
 };
 
 #endif // DEMOBJECT_H

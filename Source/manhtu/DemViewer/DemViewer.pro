@@ -22,7 +22,11 @@ SOURCES += main.cpp\
     Modules/Files/filemodule.cpp \
     Modules/Files/filegraphics.cpp \
     Modules/Files/filecontroller.cpp \    
-    Model/demobject.cpp
+    Model/demobject.cpp \
+    Modules/Color/colorcontroller.cpp \
+    Modules/Color/colormodule.cpp \
+    Modules/BaseSupport/basesupportmodule.cpp \
+    Modules/BaseSupport/basesupportcontroller.cpp
 
 HEADERS  += \
     Controller/defaultcontroller.h \
@@ -38,7 +42,11 @@ HEADERS  += \
     Modules/Files/filegraphics.h \
     Modules/Files/filecontroller.h \
     View/vertex.h \    
-    Model/demobject.h
+    Model/demobject.h \
+    Modules/Color/colorcontroller.h \
+    Modules/Color/colormodule.h \
+    Modules/BaseSupport/basesupportmodule.h \
+    Modules/BaseSupport/basesupportcontroller.h
 
 FORMS    += window.ui
 

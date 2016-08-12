@@ -3,6 +3,8 @@
 #include <QObject>
 #include "Controller/actioninterface.h"
 #include "View/graphicscomposite.h"
+#include "Controller/actionlistener.h"
+#include "Modules/Color/colorcontroller.h"
 
 class FileController : public QObject, public ActionInterface
 {
@@ -10,7 +12,13 @@ Q_OBJECT
 private:
     DemInterface* demObject;
     GraphicsComposite* graphics;
+    ActionListener* actions;
+    ColorController* colorController;
     bool hasFile;
+    float maxZ;
+    float scale;
+    void readFile();
+    float getZCoordinate(float height);
 
 public:
     FileController(QObject *parent = 0);
@@ -23,7 +31,11 @@ public:
     DemInterface* getDemObject() override;
     void setGraphics(GraphicsComposite*) override;
     bool isOpenedFile();
-    void openFile();
+    void openFile();    
+
+    // ActionInterface interface
+public:
+    void setActionPerform(ActionListener *);
 };
 
 #endif // FILECONTROLLER_H

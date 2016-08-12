@@ -2,10 +2,6 @@
 
 DemObject::DemObject()
 {
-//    float f[] = { 0 , 2 , - 4 , 1 , 0 , 0 , - 2 , - 2 , - 4 , 0 , 1 , 0 , 2 , - 2 , - 4 , 0 , 0 , 1 } ;
-//    for (int i=0; i<18; i++) {
-//        data.push_back(f[i]);
-//    }
 }
 
 GDALDataset* DemObject::getDataSet()
@@ -15,7 +11,9 @@ GDALDataset* DemObject::getDataSet()
 
 void DemObject::setDataSet(GDALDataset *ds)
 {
-    dataSet = ds;
+    dataSet = ds;    
+    cols = dataSet->GetRasterXSize();
+    rows = dataSet->GetRasterYSize();
 }
 
 
@@ -37,4 +35,42 @@ float *DemObject::getVertexArray()
 int DemObject::getNumberOfVertex()
 {
     return data.size();
+}
+
+
+int DemObject::getCols()
+{
+    return cols;
+}
+
+int DemObject::getRows()
+{
+    return rows;
+}
+
+
+float DemObject::maxHeight()
+{
+    return maxH;
+}
+
+float DemObject::minHeight()
+{
+    return minH;
+}
+
+float DemObject::setMaxHeight(float max)
+{
+    maxH = max;
+}
+
+float DemObject::setMinHeight(float min)
+{
+    minH = min;
+}
+
+
+float DemObject::heightScale(float height)
+{
+    return height/6000;
 }

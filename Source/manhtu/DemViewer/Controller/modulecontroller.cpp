@@ -1,15 +1,20 @@
 #include "modulecontroller.h"
 #include "Modules/Files/filemodule.h"
+#include "Modules/Color/colormodule.h"
+#include "Modules/BaseSupport/basesupportmodule.h"
 
 ModuleController::ModuleController()
-{
-    modules.push_back(new FilesModule());
+{    
+    modules.push_back(new ColorModule());
+    modules.push_back(new BaseSupportModule());
+    modules.push_back(new FilesModule());    
 }
 
 void ModuleController::loadModules()
 {
     for (int i=0; i<modules.size(); i++) {
         if (modules[i]->hasAction()) {
+            modules[i]->getAction()->setActionPerform(actions);
             registerAction(modules[i]->getAction());
             modules[i]->getAction()->setGraphics(modules[i]->getGraphic());
         }
