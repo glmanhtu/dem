@@ -2,6 +2,7 @@
 
 DemObject::DemObject()
 {
+    zooomStep = 2;
 }
 
 GDALDataset* DemObject::getDataSet()
@@ -19,22 +20,7 @@ void DemObject::setDataSet(GDALDataset *ds)
 
 void DemObject::addVertex(Vertex vertex)
 {
-    data.push_back(vertex.position().x());
-    data.push_back(vertex.position().y());
-    data.push_back(vertex.position().z());
-    data.push_back(vertex.color().x());
-    data.push_back(vertex.color().y());
-    data.push_back(vertex.color().z());
-}
-
-float *DemObject::getVertexArray()
-{
-    return data.data();
-}
-
-int DemObject::getNumberOfVertex()
-{
-    return data.size();
+    vertexs.push_back(vertex);    
 }
 
 
@@ -73,4 +59,41 @@ float DemObject::setMinHeight(float min)
 float DemObject::heightScale(float height)
 {
     return height/6000;
+}
+
+int DemObject::getVertexPositionIn2D(int col, int row, bool northeast)
+{
+    col = col/zooomStep;
+    row = row/zooomStep;
+    int scaledCols = (cols - 1)/zooomStep;
+    int scalesRows = (rows - 1)/zooomStep;
+    int index = 0;
+    if (!northeast) {
+        if (row == scalesRows) {
+            index = scalesRows*scaledCols*2-scaledCols + col;
+        } else {
+            index = (scaledCols + 2*(col + 1) -1) + row*scaledCols*2 - 1;
+        }
+    }
+    else {
+        if (row == 0) {
+            index = col;
+        } else {
+            index = (scaledCols + 2*(col + 1) -1) + (row-1)*scaledCols*2;
+        }
+    }
+
+    return index*3;
+}
+
+
+Vertex *DemObject::getArrayVertexs()
+{
+    return vertexs.data();
+}
+
+
+int DemObject::countVertexs()
+{
+    return vertexs.size();
 }

@@ -57,6 +57,7 @@ void FileGraphics::initializeGL()
             int minZ = *std::min_element(band_data.begin(), band_data.end());
             fcontroller->getDemObject()->setMinHeight(minZ);
             int step = 2;
+
             for (int k = 0; k < rows; k=k+step) {
                 posY = (float)(centerY - k)/centerY;
                 for (int j =0; j < cols; j=j+step) {

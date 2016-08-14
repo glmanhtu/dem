@@ -6,9 +6,9 @@
 class DemObject : public DemInterface
 {
 private:
-    GDALDataset* dataSet;
-    std::vector<float> data;
-    int cols, rows;
+    GDALDataset* dataSet;    
+    std::vector<Vertex> vertexs;
+    int cols, rows, zooomStep;
     float maxH, minH;
 public:
     DemObject();
@@ -20,9 +20,7 @@ public:
 
     // DemInterface interface
 public:
-    void addVertex(Vertex ver);
-    float *getVertexArray();
-    int getNumberOfVertex();
+    void addVertex(Vertex ver);    
 
     // DemInterface interface
 public:
@@ -41,7 +39,19 @@ public:
 
     // DemInterface interface
 public:
-    float heightScale(float height);
+    float heightScale(float height);    
+
+    // DemInterface interface
+public:
+    int getVertexPositionIn2D(int col, int row, bool northeast);
+
+    // DemInterface interface
+public:
+    Vertex *getArrayVertexs();
+
+    // DemInterface interface
+public:
+    int countVertexs();
 };
 
 #endif // DEMOBJECT_H
