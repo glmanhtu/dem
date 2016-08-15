@@ -1,4 +1,6 @@
 #include "demobject.h"
+#include "gdal.h"
+#include "gdal_priv.h"
 
 DemObject::DemObject()
 {
@@ -13,8 +15,11 @@ GDALDataset* DemObject::getDataSet()
 void DemObject::setDataSet(GDALDataset *ds)
 {
     dataSet = ds;    
-    cols = dataSet->GetRasterXSize();
-    rows = dataSet->GetRasterYSize();
+    oriCols = dataSet->GetRasterXSize();
+    oriRows = dataSet->GetRasterYSize();
+    readStep = (oriCols-1) / 1200;
+    cols = oriCols/readStep;
+    rows = oriRows/readStep;
 }
 
 
@@ -58,7 +63,7 @@ float DemObject::setMinHeight(float min)
 
 float DemObject::heightScale(float height)
 {
-    return height/6000;
+    return height/9000;
 }
 
 int DemObject::getVertexPositionIn2D(int col, int row, bool northeast)
@@ -96,4 +101,39 @@ Vertex *DemObject::getArrayVertexs()
 int DemObject::countVertexs()
 {
     return vertexs.size();
+}
+
+
+std::vector<float> DemObject::readDem()
+{
+    GDALRasterBand* band = dataSet->GetRasterBand(1);
+    std::vector<float> band_data;
+    for (int i=0; i<oriRows; i=i+readStep) {
+        std::vector<float> tmpData(oriCols);
+        band->RasterIO( GF_Read, 0, i,
+                        oriCols, 1,
+                        tmpData.data(),
+                        oriCols, 1,
+                        GDT_Float32,
+                        0, 0);
+        for (int j=0; j<oriCols;j = j+readStep) {
+            band_data.push_back(tmpData[j]);
+        }
+    }
+
+//    band->RasterIO( GF_Read, 0, 0,
+//                    cols, rows,
+//                    band_data.data(),
+//                    cols, rows,
+//                    GDT_Float32,
+//                    0, 0);
+    setMaxHeight(*std::max_element(band_data.begin(), band_data.end()));
+    setMinHeight(*std::min_element(band_data.begin(), band_data.end()));
+    return band_data;
+}
+
+
+int DemObject::getZoom()
+{
+    return zooomStep;
 }

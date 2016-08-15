@@ -8,7 +8,7 @@ class DemObject : public DemInterface
 private:
     GDALDataset* dataSet;    
     std::vector<Vertex> vertexs;
-    int cols, rows, zooomStep;
+    int cols, rows, zooomStep, readStep, oriCols, oriRows;
     float maxH, minH;
 public:
     DemObject();
@@ -17,41 +17,19 @@ public:
 public:
     void setDataSet(GDALDataset *) override;
     GDALDataset *getDataSet() override;
-
-    // DemInterface interface
-public:
-    void addVertex(Vertex ver);    
-
-    // DemInterface interface
-public:
-    int getCols();
-    int getRows();
-
-    // DemInterface interface
-public:
-    float maxHeight();
-    float minHeight();
-
-    // DemInterface interface
-public:
-    float setMaxHeight(float max);
-    float setMinHeight(float min);
-
-    // DemInterface interface
-public:
-    float heightScale(float height);    
-
-    // DemInterface interface
-public:
-    int getVertexPositionIn2D(int col, int row, bool northeast);
-
-    // DemInterface interface
-public:
-    Vertex *getArrayVertexs();
-
-    // DemInterface interface
-public:
-    int countVertexs();
+    void addVertex(Vertex ver) override;
+    int getCols() override;
+    int getRows() override;
+    float maxHeight() override;
+    float minHeight() override;
+    float setMaxHeight(float max) override;
+    float setMinHeight(float min) override;
+    float heightScale(float height) override;
+    int getVertexPositionIn2D(int col, int row, bool northeast) override;
+    Vertex *getArrayVertexs() override;
+    int countVertexs() override;
+    std::vector<float> readDem();
+    int getZoom();
 };
 
 #endif // DEMOBJECT_H

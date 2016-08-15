@@ -21,6 +21,8 @@ public:
     virtual int getVertexPositionIn2D(int col, int row, bool northeast)=0;
     virtual Vertex* getArrayVertexs()=0;
     virtual int countVertexs()=0;
+    virtual std::vector<float> readDem()=0;
+    virtual int getZoom() = 0;
 };
 
 #endif // DEMINTERFACE_H
