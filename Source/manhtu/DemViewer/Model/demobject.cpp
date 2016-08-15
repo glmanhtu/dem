@@ -20,7 +20,7 @@ void DemObject::setDataSet(GDALDataset *ds)
 
 void DemObject::addVertex(Vertex vertex)
 {
-    vertexs.push_back(vertex);    
+    vertexs.push_back(vertex);
 }
 
 
@@ -69,10 +69,10 @@ int DemObject::getVertexPositionIn2D(int col, int row, bool northeast)
     int scalesRows = (rows - 1)/zooomStep;
     int index = 0;
     if (!northeast) {
-        if (row == scalesRows) {
+        if (row == scalesRows - 1) {
             index = scalesRows*scaledCols*2-scaledCols + col;
         } else {
-            index = (scaledCols + 2*(col + 1) -1) + row*scaledCols*2 - 1;
+            index = (scaledCols + 2*(col + 1) -1) + row*scaledCols*2 -1;
         }
     }
     else {

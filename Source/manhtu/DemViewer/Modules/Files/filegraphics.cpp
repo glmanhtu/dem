@@ -63,34 +63,7 @@ void FileGraphics::initializeGL()
                 for (int j =0; j < cols; j=j+step) {
 
                     posX = (float)(j - centerX)/centerX;
-                    if (k - step >= 0 && j-step >= 0) {
-                        color = colorController->getColor(band_data[k*rows + j]);
-                        addVertex(
-                                    Vertex(
-                                        QVector3D(posX, posY, getZCoordinate(band_data[k*rows + j])),
-                                        QVector3D(color.r, color.g, color.b)
-                                    )
-                                );
-
-                        float nposY = (float)(centerY - (k -step))/centerY;
-                        color = colorController->getColor(band_data[(k-step)*rows + j]);
-                        addVertex(
-                                    Vertex(
-                                        QVector3D(posX, nposY, getZCoordinate(band_data[(k-step)*rows + j])),
-                                        QVector3D(color.r, color.g, color.b)
-                                    )
-                                );
-
-                        float nposX = (float)(j - step - centerX)/centerX;
-                        color = colorController->getColor(band_data[k*rows + j - step]);
-                        addVertex(
-                                    Vertex(
-                                        QVector3D(nposX, posY, getZCoordinate(band_data[k*rows + j - step])),
-                                        QVector3D(color.r, color.g, color.b)
-                                    )
-                                );
-                    }
-                    if (k < rows -step && j < cols -step) {
+                    if (k < rows -step && j-step >= 0) {
                         color = colorController->getColor(band_data[k*rows + j]);
                         addVertex(
                                     Vertex(
@@ -104,6 +77,33 @@ void FileGraphics::initializeGL()
                         addVertex(
                                     Vertex(
                                         QVector3D(posX, nposY, getZCoordinate(band_data[(k+step)*rows + j])),
+                                        QVector3D(color.r, color.g, color.b)
+                                    )
+                                );
+
+                        float nposX = (float)(j - step - centerX)/centerX;
+                        color = colorController->getColor(band_data[k*rows + j - step]);
+                        addVertex(
+                                    Vertex(
+                                        QVector3D(nposX, posY, getZCoordinate(band_data[k*rows + j - step])),
+                                        QVector3D(color.r, color.g, color.b)
+                                    )
+                                );
+                    }
+                    if (k - step >= 0 && j < cols -step) {
+                        color = colorController->getColor(band_data[k*rows + j]);
+                        addVertex(
+                                    Vertex(
+                                        QVector3D(posX, posY, getZCoordinate(band_data[k*rows + j])),
+                                        QVector3D(color.r, color.g, color.b)
+                                    )
+                                );
+
+                        float nposY = (float)(centerY - (k -step))/centerY;
+                        color = colorController->getColor(band_data[(k-step)*rows + j]);
+                        addVertex(
+                                    Vertex(
+                                        QVector3D(posX, nposY, getZCoordinate(band_data[(k-step)*rows + j])),
                                         QVector3D(color.r, color.g, color.b)
                                     )
                                 );

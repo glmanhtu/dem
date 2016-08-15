@@ -51,25 +51,35 @@ void BaseSupportController::generateBaseSupport()
     int step = 2;
     ColorController* colorController = (ColorController*)actions->getAction(QString("Color.ColorController"));    
     Vertex* demData = demObject->getArrayVertexs();
-    for (int i=0; i<demObject->getCols(); i=i+step) {
+    for (int i=0; i<= demObject->getCols()-1 - step; i=i+step) {
+
+        // Top
         int index = demObject->getVertexPositionIn2D(i, 0, true);
         generateTriangleInSide(index, colorController, demObject->getArrayVertexs(), false);
-        index = demObject->getVertexPositionIn2D(i, demObject->getRows() - 1, false);
+
+        // Bottom
+        index = demObject->getVertexPositionIn2D(i, demObject->getRows() - 1 - step, false);
         generateTriangleInSide(index, colorController, demObject->getArrayVertexs(), false);
     }
 
-    for (int i=0; i<demObject->getRows(); i=i+step) {
+    for (int i=0; i<= demObject->getRows()-1 - step; i=i+step) {
+
+        // Left
         int index = demObject->getVertexPositionIn2D(0, i, false);
         generateTriangleInSide(index, colorController, demObject->getArrayVertexs(), true);
+
+        // Right
         index = demObject->getVertexPositionIn2D(demObject->getCols() - 1 - step, i, true);
         generateTriangleInSide(index, colorController, demObject->getArrayVertexs(), true);
     }
+    // Top left
     demObject->addVertex(
         Vertex(
             QVector3D(demData[2].position().x(), demData[2].position().y(), baseHeight),
             color1
         )
     );
+    // Top right
     int index = demObject->getVertexPositionIn2D(demObject->getCols() - 1 - step, 0, true);
     demObject->addVertex(
         Vertex(
@@ -77,6 +87,7 @@ void BaseSupportController::generateBaseSupport()
             color1
         )
     );
+    // Bottom left
     index = demObject->getVertexPositionIn2D(0, demObject->getRows() - 1 - step, false);
     demObject->addVertex(
         Vertex(
@@ -85,27 +96,27 @@ void BaseSupportController::generateBaseSupport()
         )
     );
 
-//    demObject->addVertex(
-//        Vertex(
-//            QVector3D(demData[index].position().x(), demData[index].position().y(), baseHeight),
-//            color1
-//        )
-//    );
+    demObject->addVertex(
+        Vertex(
+            QVector3D(demData[index].position().x(), demData[index].position().y(), baseHeight),
+            color1
+        )
+    );
 
-//    index = demObject->getVertexPositionIn2D(demObject->getCols() - 1 - step, demObject->getRows() - 1 - step, true);
-//    demObject->addVertex(
-//        Vertex(
-//            QVector3D(demData[index+1].position().x(), demData[index+1].position().y(), baseHeight),
-//            color1
-//        )
-//    );
-//    index = demObject->getVertexPositionIn2D(demObject->getCols() - 1 - step, 0, true);
-//        demObject->addVertex(
-//            Vertex(
-//                QVector3D(demData[index].position().x(), demData[index].position().y(), baseHeight),
-//                color1
-//            )
-//        );
+    index = demObject->getVertexPositionIn2D(demObject->getCols() - 1 - step, demObject->getRows() - 1 - step, true);
+    demObject->addVertex(
+        Vertex(
+            QVector3D(demData[index+1].position().x(), demData[index+1].position().y(), baseHeight),
+            color1
+        )
+    );
+    index = demObject->getVertexPositionIn2D(demObject->getCols() - 1 - step, 0, true);
+        demObject->addVertex(
+            Vertex(
+                QVector3D(demData[index].position().x(), demData[index].position().y(), baseHeight),
+                color1
+            )
+        );
 
 }
 
