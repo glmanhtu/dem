@@ -30,6 +30,7 @@ public:
     int countVertexs() override;
     std::vector<float> readDem();
     int getZoom();
+    void clean();
 };
 
 #endif // DEMOBJECT_H

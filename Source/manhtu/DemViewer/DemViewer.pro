@@ -48,7 +48,7 @@ HEADERS  += \
     Modules/BaseSupport/basesupportmodule.h \
     Modules/BaseSupport/basesupportcontroller.h
 
-FORMS    += window.ui
+FORMS    +=
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../../../../../usr/local/Cellar/gdal/1.11.3_1/lib/release/ -lgdal
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../../../../../usr/local/Cellar/gdal/1.11.3_1/lib/debug/ -lgdal

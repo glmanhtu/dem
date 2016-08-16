@@ -63,7 +63,7 @@ float DemObject::setMinHeight(float min)
 
 float DemObject::heightScale(float height)
 {
-    return height/9000;
+    return height/6000;
 }
 
 int DemObject::getVertexPositionIn2D(int col, int row, bool northeast)
@@ -136,4 +136,10 @@ std::vector<float> DemObject::readDem()
 int DemObject::getZoom()
 {
     return zooomStep;
+}
+
+
+void DemObject::clean()
+{
+
 }

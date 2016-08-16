@@ -12,7 +12,8 @@ class Graphics : public QOpenGLWidget, public GraphicsComposite
 private:
     const int GRAPHICS_ID = 0;
     QWidget *parent;
-    unsigned int vbo;
+    unsigned int vbo, vbo2;
+    float zoomByScale;
 
 public:
     Graphics(QWidget *parent = 0);
@@ -28,10 +29,11 @@ protected:
     void paintGL() override;
     void resizeGL(int width, int height) override;
 
-    QSize minimumSizeHint() const;
-    QSize sizeHint() const;
+    QSize minimumSizeHint() const override;
+    QSize sizeHint() const override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
 
 public slots:
     // slots for xyz-rotation slider

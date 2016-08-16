@@ -47,7 +47,8 @@ void BaseSupportController::setGraphics(GraphicsComposite *)
 
 void BaseSupportController::generateBaseSupport()
 {
-    baseHeight = demObject->heightScale(demObject->minHeight() - demObject->maxHeight()/6);
+    baseHeight = demObject->heightScale(demObject->minHeight() - 1000);
+
     int step = 2;
     ColorController* colorController = (ColorController*)actions->getAction(QString("Color.ColorController"));    
     Vertex* demData = demObject->getArrayVertexs();
