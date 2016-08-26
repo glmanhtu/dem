@@ -30,7 +30,7 @@ public:
     DemInterface *getDemObject();
     void setGraphics(GraphicsComposite *);
     void generateBaseSupport();    
-    void generateTriangleInSide(int index, ColorController* colorController, Vertex* vertexs, bool northsouth);
+    void generateTriangleInSide(int x, int y, ColorController* colorController, Vertex* vertexs);
     // ActionInterface interface
 public:
     void setActionPerform(ActionListener *);

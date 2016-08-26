@@ -3,18 +3,25 @@
 #include <QObject>
 #include "Controller/actioninterface.h"
 #include "View/graphicscomposite.h"
+#include "Controller/actionlistener.h"
+#include "Modules/Color/colorcontroller.h"
 
 class FileController : public QObject, public ActionInterface
 {
 Q_OBJECT
-public:
-    FileController(QObject *parent = 0);
+private:
     DemInterface* demObject;
     GraphicsComposite* graphics;
-    void openFile();
+    ActionListener* actions;
+    ColorController* colorController;
+    bool hasFile;
+    float maxZ;
+    float scale;
+    void readFile();
+    float getZCoordinate(float height);
 
-    // ActionInterface interface
 public:
+    FileController(QObject *parent = 0);
     void initAction() override;
     void terminalAction() override;
     QString getActionName() override;
@@ -23,6 +30,12 @@ public:
     void setDemObject(DemInterface *) override;
     DemInterface* getDemObject() override;
     void setGraphics(GraphicsComposite*) override;
+    bool isOpenedFile();
+    void openFile();    
+
+    // ActionInterface interface
+public:
+    void setActionPerform(ActionListener *);
 };
 
 #endif // FILECONTROLLER_H

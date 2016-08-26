@@ -1,9 +1,36 @@
 #include "graphicscomposite.h"
 #include "graphics.h"
 
+QSize GraphicsComposite::getSize()
+{
+    return graphicsMain->getSize();
+}
+
+void GraphicsComposite::mousePressEvent(QMouseEvent *event)
+{
+}
+
+void GraphicsComposite::mouseMoveEvent(QMouseEvent *event)
+{
+}
+
+void GraphicsComposite::mouseDoubleClickEvent(QMouseEvent *event)
+{
+}
+
 void GraphicsComposite::setMainGraphics(GraphicsComposite * parent)
 {
     graphicsMain = parent;
+}
+
+void GraphicsComposite::setDemObject(DemInterface *dem)
+{
+    demObject = dem;
+}
+
+void GraphicsComposite::addVertex(Vertex vertex)
+{
+    graphicsMain->addVertex(vertex);
 }
 
 GraphicsComposite* GraphicsComposite::getMainGraphics()
@@ -19,6 +46,11 @@ void GraphicsComposite::setSize(int width, int height)
 void GraphicsComposite::updateGraphics()
 {
     graphicsMain->updateGraphics();
+}
+
+void GraphicsComposite::updatePaintGL()
+{
+    graphicsMain->updatePaintGL();
 }
 
 QAction* GraphicsComposite::createQAction(QString name)

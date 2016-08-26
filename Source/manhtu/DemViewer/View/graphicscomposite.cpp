@@ -16,9 +16,9 @@ void GraphicsComposite::setDemObject(DemInterface *dem)
     demObject = dem;
 }
 
-void GraphicsComposite::addVertex(Vertex vertex)
+void GraphicsComposite::addVertex(Vertex vertex, int col, int row)
 {
-    graphicsMain->addVertex(vertex);
+    graphicsMain->addVertex(vertex, col, row);
 }
 
 GraphicsComposite* GraphicsComposite::getMainGraphics()
@@ -30,6 +30,19 @@ void GraphicsComposite::setSize(int width, int height)
 {
     graphicsMain->setSize(width, height);
 }
+
+void GraphicsComposite::mousePressEvent(QMouseEvent *event)
+{
+}
+
+void GraphicsComposite::mouseMoveEvent(QMouseEvent *event)
+{
+}
+
+void GraphicsComposite::mouseDoubleClickEvent(QMouseEvent *event)
+{
+}
+
 
 void GraphicsComposite::updateGraphics()
 {
@@ -108,4 +121,9 @@ bool GraphicsComposite::registerMenu(QMenuBar * qMenuBar)
 int GraphicsComposite::addToGraphicsComponent()
 {
     return GRAPHICS_ID;
+}
+
+void GraphicsComposite::updatePaintGL()
+{
+    graphicsMain->updatePaintGL();
 }

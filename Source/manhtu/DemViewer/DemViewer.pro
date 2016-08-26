@@ -26,7 +26,9 @@ SOURCES += main.cpp\
     Modules/Color/colorcontroller.cpp \
     Modules/Color/colormodule.cpp \
     Modules/BaseSupport/basesupportmodule.cpp \
-    Modules/BaseSupport/basesupportcontroller.cpp
+    Modules/BaseSupport/basesupportcontroller.cpp \    
+    Modules/Rotate/rotategraphics.cpp \
+    Modules/Rotate/rotatemodule.cpp
 
 HEADERS  += \
     Controller/defaultcontroller.h \
@@ -46,7 +48,9 @@ HEADERS  += \
     Modules/Color/colorcontroller.h \
     Modules/Color/colormodule.h \
     Modules/BaseSupport/basesupportmodule.h \
-    Modules/BaseSupport/basesupportcontroller.h
+    Modules/BaseSupport/basesupportcontroller.h \
+    Modules/Rotate/rotategraphics.h \
+    Modules/Rotate/rotatemodule.h
 
 FORMS    +=
 
@@ -63,5 +67,4 @@ else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/..
 else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../../../../../../../../usr/local/Cellar/gdal/1.11.3_1/lib/debug/gdal.lib
 else:unix: PRE_TARGETDEPS += $$PWD/../../../../../../../../usr/local/Cellar/gdal/1.11.3_1/lib/libgdal.a
 
-RESOURCES += \
-    resources.qrc
+RESOURCES +=

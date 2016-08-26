@@ -3,23 +3,27 @@
 
 #include "gdal.h"
 #include "gdal_priv.h"
-#include <qopengl.h>
-#include <QVector>
-#include <QVector3D>
+#include "View/vertex.h"
 
 class DemInterface
 {
 public:
-    virtual void setSize(int) = 0;
-    virtual int count() = 0;
-    virtual int vertexCount() = 0;
-    virtual const GLfloat *constData() = 0;
-    virtual void add(const QVector3D &v, const QVector3D &n) = 0;
-    virtual void quad(QVector3D v1, QVector3D v2, QVector3D v3, QVector3D v4) = 0;
-    virtual void tri(QVector3D v1, QVector3D v2, QVector3D v3) = 0;
+    virtual void setDataSet(GDALDataset*) = 0;
+    virtual GDALDataset* getDataSet() = 0;
+    virtual void addVertex(Vertex ver) = 0;
+    virtual int getCols()=0;
+    virtual int getRows() = 0;
+    virtual float maxHeight() = 0;
+    virtual float minHeight() = 0;
+    virtual float setMaxHeight(float max)=0;
+    virtual float setMinHeight(float min)=0;
+    virtual float heightScale(float height) = 0;
+    virtual int getVertexPositionIn2D(int col, int row, bool northeast)=0;
+    virtual Vertex* getArrayVertexs()=0;
+    virtual int countVertexs()=0;
+    virtual std::vector<float> readDem()=0;
+    virtual int getZoom() = 0;
     virtual void clean() = 0;
-    virtual void setGDALDataSet(GDALDataset* dataSet) = 0;
-    virtual GDALDataset* getGDALDataSet() = 0;
 };
 
 #endif // DEMINTERFACE_H

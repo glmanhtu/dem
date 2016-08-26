@@ -3,19 +3,22 @@
 
 #include "View/graphicscomposite.h"
 #include "filecontroller.h"
-
-class ColorRGBA
-{
-public:
-    float r,b,g,a;
-};
+#include "View/vertex.h"
+#include "Modules/Color/colorcontroller.h"
+#include "Modules/BaseSupport/basesupportcontroller.h"
 
 class FileGraphics : public GraphicsComposite
 {
 private:
     const int GRAPHICS_ID = 0;
     FileController* fcontroller;
-    ColorRGBA getColor(unsigned char const * const p);
+    ColorController* colorController;
+    BaseSupportController* bsController;
+    vector<float> data_paint;
+    vector<Vertex> data_vertex;    
+    float maxZ,scale;
+    float getZCoordinate(float height);        
+
 public:
     FileGraphics();
     ~FileGraphics();
@@ -25,7 +28,6 @@ public:
     void paintGL();
     void resizeGL(int width, int height);
 
-    // GraphicsComposite interface
 public:
     void initial();
 };

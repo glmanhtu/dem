@@ -31,12 +31,14 @@ public:
     bool registerMenu(QMenuBar*);
     virtual void setSize(int width, int height);
     virtual void updateGraphics();
+    virtual void updatePaintGL();
     QAction* createQAction( QString name );
-    virtual void addVertex(Vertex vertex);
+    virtual void addVertex(Vertex vertex, int col, int row);
     void setDemObject(DemInterface* dem);
     virtual QSize getSize();
-
-public:
+    virtual void mousePressEvent(QMouseEvent *event);
+    virtual void mouseMoveEvent(QMouseEvent *event);
+    virtual void mouseDoubleClickEvent(QMouseEvent *event);
     virtual void initial() = 0;
     virtual void initializeGL() = 0;
     virtual void paintGL() =0 ;

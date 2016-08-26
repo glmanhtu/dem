@@ -3,72 +3,42 @@
 
 #include "graphicscomposite.h"
 #include "menu.h"
-#include <QWidget>
 #include <QOpenGLWidget>
-#include <QOpenGLFunctions>
-#include <QOpenGLVertexArrayObject>
-#include <QOpenGLBuffer>
-#include <QMatrix4x4>
-#include "logo.h"
-#include "scrollviewport.h"
+#include "vertex.h"
 
-QT_FORWARD_DECLARE_CLASS(QOpenGLShaderProgram)
-
-class Graphics : public QOpenGLWidget, protected QOpenGLFunctions, public GraphicsComposite
+class Graphics : public QOpenGLWidget, public GraphicsComposite
 {
-    Q_OBJECT
-    friend class ScrollViewport;
+    Q_OBJECT    
 private:
     const int GRAPHICS_ID = 0;
     QWidget *parent;
-    DemInterface* demObject;
-    void setupVertexAttribs();
-
-    bool m_core;
-    int m_xRot;
-    int m_yRot;
-    int m_zRot;
-    QPoint m_lastPos;
-    Logo m_logo;
-    QOpenGLVertexArrayObject m_vao;
-    QOpenGLBuffer m_logoVbo;
-    QOpenGLShaderProgram *m_program;
-    int m_projMatrixLoc;
-    int m_mvMatrixLoc;
-    int m_normalMatrixLoc;
-    int m_lightPosLoc;
-    QMatrix4x4 m_proj;
-    QMatrix4x4 m_camera;
-    QMatrix4x4 m_world;
-    bool m_transparent;
-
-public slots:
-    void setXRotation(int angle);
-    void setYRotation(int angle);
-    void setZRotation(int angle);
-    void cleanup();
-
-signals:
-    void xRotationChanged(int angle);
-    void yRotationChanged(int angle);
-    void zRotationChanged(int angle);
+    unsigned int vbo, vbo2;
+    float zoomByScale;
 
 public:
     Graphics(QWidget *parent = 0);
-    QSize minimumSizeHint() const Q_DECL_OVERRIDE;
-    QSize sizeHint() const Q_DECL_OVERRIDE;
     void initial() Q_DECL_OVERRIDE;
     void setSize(int, int) Q_DECL_OVERRIDE;
     void updateGraphics() Q_DECL_OVERRIDE;
-    void setDemObject(DemInterface*);
+    void addVertex(Vertex vertex) Q_DECL_OVERRIDE;
+    QSize getSize() Q_DECL_OVERRIDE;
+    void updatePaintGL();
     ~Graphics();
 
 protected:
-    void initializeGL() Q_DECL_OVERRIDE;
-    void paintGL() Q_DECL_OVERRIDE;
-    void resizeGL(int width, int height) Q_DECL_OVERRIDE;
-    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
-    void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void initializeGL() override;
+    void paintGL() override;
+    void resizeGL(int width, int height) override;
+
+    QSize minimumSizeHint() const override;
+    QSize sizeHint() const override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
+
+private:
+    void draw();
+    QPoint lastPos;
 };
 
 #endif // GRAPHICS_H

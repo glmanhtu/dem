@@ -5,8 +5,7 @@
 #include "Model/deminterface.h"
 #include "modulecontroller.h"
 #include "View/graphics.h"
-#include "View/graphicsglobal.h"
-#include "View/mainwindow.h"
+#include "View/window.h"
 
 class DefaultController
 {
@@ -14,7 +13,7 @@ private:
     ActionListener* actionListener;
     DemInterface* demObject;
     ModuleController* modules;
-    MainWindow mainWindow;
+    Graphics window;
     Graphics* graphics;
 
 public:

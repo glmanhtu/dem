@@ -38,6 +38,7 @@ QString FilesModule::getModuleName()
 void FilesModule::initModule()
 {
     fgraphics->initial();
+    fcontroller.initAction();
 }
 
 void FilesModule::terminalModule()

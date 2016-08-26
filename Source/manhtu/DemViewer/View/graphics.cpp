@@ -8,12 +8,14 @@ QSize Graphics::getSize()
     return this->size();
 }
 
+void Graphics::updatePaintGL()
+{
+    update();
+}
+
 Graphics::Graphics(QWidget *parent) : QOpenGLWidget(parent)
 {
-    this->parent = parent;
-    xRot = -960;
-    yRot = 352;
-    zRot = 0;
+    this->parent = parent;    
     setAutoFillBackground(false);
     zoomByScale = 0.65;
 }
@@ -59,12 +61,16 @@ void Graphics::initializeGL()
         glGenBuffers(1, &vbo);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*numbVertex, demObject->getArrayVertexs(), GL_STATIC_DRAW);
+
+        glGenBuffers(1, &ibo);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, demObject->countIndices() * sizeof(unsigned int), demObject->getVertexIndices(), GL_STATIC_DRAW);
     }    
 }
 
-void Graphics::addVertex(Vertex vertex)
+void Graphics::addVertex(Vertex vertex, int col, int row)
 {
-    demObject->addVertex(vertex);
+    demObject->addVertex(vertex, demObject->getVertexPosition(col, row));
 }
 
 void Graphics::paintGL()
@@ -72,10 +78,7 @@ void Graphics::paintGL()
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glLoadIdentity();
     glScalef(zoomByScale,zoomByScale,zoomByScale);
-    glTranslatef(0.0, 0.0, -10.0);
-    glRotatef(xRot / 16.0, 1.0, 0.0, 0.0);
-    glRotatef(yRot / 16.0, 0.0, 1.0, 0.0);
-    glRotatef(zRot / 16.0, 0.0, 0.0, 1.0);    
+    glTranslatef(0.0, 0.0, -10.0);       
 
     for(int i=0; i<graphics.size(); i++) {
         graphics[i]->paintGL();
@@ -86,17 +89,18 @@ void Graphics::paintGL()
     if (numbVertex > 0) {
 
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
         glEnableClientState(GL_VERTEX_ARRAY);
         glEnableClientState(GL_COLOR_ARRAY);
 
         glVertexPointer(3, GL_FLOAT, sizeof(Vertex), (void*)Vertex::positionOffset());
         glColorPointer(3, GL_FLOAT, sizeof(Vertex), (void*)Vertex::colorOffset());
-        glDrawArrays(GL_TRIANGLES, 0, numbVertex);
+        glDrawElements(GL_TRIANGLES, demObject->countIndices(), GL_UNSIGNED_INT, (void*)0);
 
         glDisableClientState(GL_COLOR_ARRAY);
         glDisableClientState(GL_VERTEX_ARRAY);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 }
 
@@ -126,58 +130,20 @@ QSize Graphics::sizeHint() const
     return QSize(400, 400);
 }
 
-static void qNormalizeAngle(int &angle)
-{
-    while (angle < 0)
-        angle += 360 * 16;
-    while (angle > 360)
-        angle -= 360 * 16;
-}
-
-void Graphics::setXRotation(int angle)
-{
-    qNormalizeAngle(angle);
-    if (angle != xRot) {
-        xRot = angle;
-        emit xRotationChanged(angle);
-        update();
-    }
-}
-
-void Graphics::setYRotation(int angle)
-{
-    qNormalizeAngle(angle);
-    if (angle != yRot) {
-        yRot = angle;
-        emit yRotationChanged(angle);
-        update();
-    }
-}
-
-void Graphics::setZRotation(int angle)
-{
-    qNormalizeAngle(angle);
-    if (angle != zRot) {
-        zRot = angle;
-        emit zRotationChanged(angle);
-        update();
-    }
-}
-
 void Graphics::mousePressEvent(QMouseEvent *event)
 {
+    for(int i=0; i<graphics.size(); i++) {
+        graphics[i]->mousePressEvent(event);
+    }
     lastPos = event->pos();
 }
 
 void Graphics::mouseMoveEvent(QMouseEvent *event)
 {
-    int dx = event->x() - lastPos.x();
-    int dy = event->y() - lastPos.y();
-
-    if (event->buttons() & Qt::LeftButton) {
-        setXRotation(xRot + 8 * dy);
-        setYRotation(yRot + 8 * dx);        
-    } else if (event->buttons() & Qt::RightButton) {
+    for(int i=0; i<graphics.size(); i++) {
+        graphics[i]->mouseMoveEvent(event);
+    }
+    if (event->buttons() & Qt::RightButton) {
         if (lastPos.x() < event->x()) {
             if (zoomByScale < 1.5) {
                 zoomByScale += 0.01;
@@ -189,12 +155,15 @@ void Graphics::mouseMoveEvent(QMouseEvent *event)
                 update();
             }
         }
-    }    
+    }
     lastPos = event->pos();
 }
 
 void Graphics::mouseDoubleClickEvent(QMouseEvent *e)
 {
+    for(int i=0; i<graphics.size(); i++) {
+        graphics[i]->mouseDoubleClickEvent(e);
+    }
     if ( e->button() == Qt::LeftButton ) {
         if (zoomByScale < 1.5) {
             zoomByScale += 0.05;

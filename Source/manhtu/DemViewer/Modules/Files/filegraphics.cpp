@@ -44,7 +44,6 @@ void FileGraphics::initializeGL()
         for (int k = 0; k < rows; k=k+step) {
             posY = (float)(centerY - k)/centerY;
             for (int j =0; j < cols; j=j+step) {
-
                 posX = (float)(j - centerX)/centerX;
                 if (k < rows -step && j-step >= 0) {
                     color = colorController->getColor(band_data[k*rows + j]);
@@ -52,7 +51,7 @@ void FileGraphics::initializeGL()
                                 Vertex(
                                     QVector3D(posX, posY, getZCoordinate(band_data[k*rows + j])),
                                     QVector3D(color.r, color.g, color.b)
-                                )
+                                ), j, k
                             );
 
                     float nposY = (float)(centerY - (k +step))/centerY;
@@ -61,7 +60,7 @@ void FileGraphics::initializeGL()
                                 Vertex(
                                     QVector3D(posX, nposY, getZCoordinate(band_data[(k+step)*rows + j])),
                                     QVector3D(color.r, color.g, color.b)
-                                )
+                                ), j, k+step
                             );
 
                     float nposX = (float)(j - step - centerX)/centerX;
@@ -70,7 +69,7 @@ void FileGraphics::initializeGL()
                                 Vertex(
                                     QVector3D(nposX, posY, getZCoordinate(band_data[k*rows + j - step])),
                                     QVector3D(color.r, color.g, color.b)
-                                )
+                                ), j -step, k
                             );
                 }
                 if (k - step >= 0 && j < cols -step) {
@@ -79,7 +78,7 @@ void FileGraphics::initializeGL()
                                 Vertex(
                                     QVector3D(posX, posY, getZCoordinate(band_data[k*rows + j])),
                                     QVector3D(color.r, color.g, color.b)
-                                )
+                                ), j, k
                             );
 
                     float nposY = (float)(centerY - (k -step))/centerY;
@@ -88,7 +87,7 @@ void FileGraphics::initializeGL()
                                 Vertex(
                                     QVector3D(posX, nposY, getZCoordinate(band_data[(k-step)*rows + j])),
                                     QVector3D(color.r, color.g, color.b)
-                                )
+                                ), j, k- step
                             );
 
                     float nposX = (float)(j +step - centerX)/centerX;
@@ -97,7 +96,7 @@ void FileGraphics::initializeGL()
                                 Vertex(
                                     QVector3D(nposX, posY, getZCoordinate(band_data[k*rows + j+step])),
                                     QVector3D(color.r, color.g, color.b)
-                                )
+                                ), j+step, k
                             );
                 }
 
