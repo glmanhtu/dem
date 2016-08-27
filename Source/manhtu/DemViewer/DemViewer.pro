@@ -28,7 +28,9 @@ SOURCES += main.cpp\
     Modules/BaseSupport/basesupportmodule.cpp \
     Modules/BaseSupport/basesupportcontroller.cpp \    
     Modules/Rotate/rotategraphics.cpp \
-    Modules/Rotate/rotatemodule.cpp
+    Modules/Rotate/rotatemodule.cpp \
+    Modules/Zoom/zoommodule.cpp \
+    Modules/Zoom/zoomgraphics.cpp
 
 HEADERS  += \
     Controller/defaultcontroller.h \
@@ -50,7 +52,9 @@ HEADERS  += \
     Modules/BaseSupport/basesupportmodule.h \
     Modules/BaseSupport/basesupportcontroller.h \
     Modules/Rotate/rotategraphics.h \
-    Modules/Rotate/rotatemodule.h
+    Modules/Rotate/rotatemodule.h \
+    Modules/Zoom/zoommodule.h \
+    Modules/Zoom/zoomgraphics.h
 
 FORMS    +=
 

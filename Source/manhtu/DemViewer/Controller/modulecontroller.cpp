@@ -3,9 +3,11 @@
 #include "Modules/Color/colormodule.h"
 #include "Modules/BaseSupport/basesupportmodule.h"
 #include "Modules/Rotate/rotatemodule.h"
+#include "Modules/Zoom/zoommodule.h"
 
 ModuleController::ModuleController()
 {
+    modules.push_back(new ZoomModule());
     modules.push_back(new RotateModule());
     modules.push_back(new ColorModule());
     modules.push_back(new BaseSupportModule());

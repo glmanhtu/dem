@@ -16,8 +16,7 @@ void Graphics::updatePaintGL()
 Graphics::Graphics(QWidget *parent) : QOpenGLWidget(parent)
 {
     this->parent = parent;    
-    setAutoFillBackground(false);
-    zoomByScale = 0.65;
+    setAutoFillBackground(false);    
 }
 
 void Graphics::updateGraphics()
@@ -94,8 +93,7 @@ void Graphics::addVertex(Vertex vertex, int col, int row)
 void Graphics::paintGL()
 {
     glClearColor(0.0, 0.0, 0.0, 1.0);
-    glLoadIdentity();
-    glScalef(zoomByScale,zoomByScale,zoomByScale);
+    glLoadIdentity();    
     glTranslatef(0.0, 0.0, -10.0);       
 
     for(int i=0; i<graphics.size(); i++) {
@@ -155,48 +153,21 @@ void Graphics::mousePressEvent(QMouseEvent *event)
 {
     for(int i=0; i<graphics.size(); i++) {
         graphics[i]->mousePressEvent(event);
-    }
-    lastPos = event->pos();
+    }    
 }
 
 void Graphics::mouseMoveEvent(QMouseEvent *event)
 {
     for(int i=0; i<graphics.size(); i++) {
         graphics[i]->mouseMoveEvent(event);
-    }
-    if (event->buttons() & Qt::RightButton) {
-        if (lastPos.x() < event->x()) {
-            if (zoomByScale < 1.5) {
-                zoomByScale += 0.01;
-                update();
-            }
-        } else {
-            if (zoomByScale > 0.65) {
-                zoomByScale -= 0.01;
-                update();
-            }
-        }
-    }
-    lastPos = event->pos();
+    }        
 }
 
 void Graphics::mouseDoubleClickEvent(QMouseEvent *e)
 {
     for(int i=0; i<graphics.size(); i++) {
         graphics[i]->mouseDoubleClickEvent(e);
-    }
-    if ( e->button() == Qt::LeftButton ) {
-        if (zoomByScale < 1.5) {
-            zoomByScale += 0.05;
-            update();
-        }
-    }
-    if (e->button() == Qt::RightButton) {
-        if (zoomByScale > 0.65) {
-            zoomByScale -= 0.05;
-            update();
-        }
-    }
+    }    
 }
 
 Graphics::~Graphics()

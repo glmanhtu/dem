@@ -12,8 +12,7 @@ class Graphics : public QOpenGLWidget, public GraphicsComposite
 private:
     const int GRAPHICS_ID = 0;
     QWidget *parent;
-    unsigned int vbo, ibo;
-    float zoomByScale;
+    unsigned int vbo, ibo;    
 
 public:
     Graphics(QWidget *parent = 0);
@@ -22,7 +21,7 @@ public:
     void updateGraphics() Q_DECL_OVERRIDE;
     void addVertex(Vertex vertex, int col, int row) Q_DECL_OVERRIDE;
     QSize getSize() Q_DECL_OVERRIDE;
-    void updatePaintGL();
+    void updatePaintGL() Q_DECL_OVERRIDE;
     ~Graphics();
 
 protected:
@@ -35,11 +34,6 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseDoubleClickEvent(QMouseEvent *event) override;
-
-private:
-    void draw();
-
-    QPoint lastPos;
 };
 
 #endif // GRAPHICS_H
