@@ -47,11 +47,29 @@ void Graphics::initializeGL()
 {
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);    
     glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
-    static GLfloat lightPosition[4] = { 0, 0, 10, 1.0 };
-    glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
 
+
+    glShadeModel(GL_SMOOTH);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    // enable color tracking
+    glEnable(GL_COLOR_MATERIAL);
+    // set material properties which will be assigned by glColor
+    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+
+    // Create light components
+    float ambientLight[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+    float diffuseLight[] = { 0.8f, 0.8f, 0.8, 1.0f };
+    float specularLight[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+    float position[] = { -0.5f, 0.5f, 8.0f, 1.0f };
+
+    // Assign created components to GL_LIGHT0
+    glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, specularLight);
+    glLightfv(GL_LIGHT0, GL_POSITION, position);
     for(int i=0; i<graphics.size(); i++) {
         graphics[i]->initializeGL();
     }
@@ -92,11 +110,14 @@ void Graphics::paintGL()
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
         glEnableClientState(GL_VERTEX_ARRAY);
         glEnableClientState(GL_COLOR_ARRAY);
+        glEnableClientState(GL_NORMAL_ARRAY);
 
         glVertexPointer(3, GL_FLOAT, sizeof(Vertex), (void*)Vertex::positionOffset());
         glColorPointer(3, GL_FLOAT, sizeof(Vertex), (void*)Vertex::colorOffset());
+        glNormalPointer(GL_FLOAT, sizeof(Vertex), (void*)Vertex::normalOffset());
         glDrawElements(GL_TRIANGLES, demObject->countIndices(), GL_UNSIGNED_INT, (void*)0);
 
+        glDisableClientState(GL_NORMAL_ARRAY);
         glDisableClientState(GL_COLOR_ARRAY);
         glDisableClientState(GL_VERTEX_ARRAY);
         glBindBuffer(GL_ARRAY_BUFFER, 0);

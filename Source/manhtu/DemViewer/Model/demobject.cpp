@@ -4,7 +4,7 @@
 
 DemObject::DemObject()
 {
-    zooomStep = 2;
+    zooomStep = 4;
 }
 
 GDALDataset* DemObject::getDataSet()
@@ -27,7 +27,9 @@ void DemObject::addVertex(Vertex vertex, int position)
 {
     int currentPosition = vertexs.size() - 1;
     if (position > currentPosition) {
-        vertexs.push_back(vertex);
+        vertexs.push_back(vertex);        
+    } else {
+        vertexs[position].setNormal(QVector3D::normal(vertex.normal(), vertexs[position].normal()));
     }
     ind.push_back(position);
 }
@@ -199,25 +201,17 @@ int DemObject::getVertexPosition(int x, int y, int layer, int direction)
     y= y/zooomStep;
 
     switch (direction) {
-    case DemInterface::DIRECTION_NORTH:
-        if (y == 0) {
-            return (scaledRows + 1)* scaledCols + scaledRows + layer + x;
-        }
+    case DemInterface::DIRECTION_NORTH:        
+        return (scaledRows + 1)* scaledCols + scaledRows + layer + x;
         break;
     case DemInterface::DIRECTION_SOUTH:
-        if (y == scaledRows) {
-            return  (scaledRows + 1)* scaledCols + scaledRows + layer + scaledCols + x;
-        }
+        return  (scaledRows + 1)* scaledCols + scaledRows + layer + scaledCols + x + 1;
         break;
-    case DemInterface::DIRECTION_WEST:
-        if (x == 0) {
-            return (scaledRows + 1)* scaledCols + scaledRows + layer + 2*scaledCols + y;
-        }
+    case DemInterface::DIRECTION_WEST:        
+        return (scaledRows + 1)* scaledCols + scaledRows + layer + 2*scaledCols + y + 1;
         break;
-    case DemInterface::DIRECTION_EAST:
-        if (x == scaledCols) {
-            return (scaledRows + 1)* scaledCols + scaledRows + layer + 2*scaledCols + scaledRows -2 + y;
-        }
+    case DemInterface::DIRECTION_EAST:        
+        return (scaledRows + 1)* scaledCols + scaledRows + layer + 2*scaledCols + scaledRows +2 + y;
         break;
     default:
         break;

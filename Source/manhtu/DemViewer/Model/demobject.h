@@ -8,7 +8,7 @@ class DemObject : public DemInterface
 private:
     GDALDataset* dataSet;    
     std::vector<Vertex> vertexs;
-    std::vector<int> ind;
+    std::vector<int> ind;    
     int cols, rows, zooomStep, readStep, oriCols, oriRows;
     float maxH, minH;
 public:
