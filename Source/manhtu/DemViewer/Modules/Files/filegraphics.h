@@ -9,8 +9,7 @@
 
 class FileGraphics : public GraphicsComposite
 {
-private:
-    const int GRAPHICS_ID = 0;
+private:    
     FileController* fcontroller;
     ColorController* colorController;
     BaseSupportController* bsController;

@@ -20,7 +20,7 @@ void ActionListener::setDemObject(DemInterface * demObj)
 
 ActionInterface* ActionListener::getAction(QString name)
 {
-    for(int i=0; i<actions.size(); i++) {
+    for(std::string::size_type i=0; i<actions.size(); i++) {
         if (actions[i]->getActionName() == name) {
             return actions[i];
         }
@@ -29,9 +29,6 @@ ActionInterface* ActionListener::getAction(QString name)
 }
 
 ActionListener::~ActionListener()
-{
-    for(int i=0; i<actions.size(); i++) {
-        delete actions[i];
-    }
+{    
 }
 

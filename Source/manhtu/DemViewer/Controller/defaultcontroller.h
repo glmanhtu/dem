@@ -13,8 +13,7 @@ private:
     ActionListener* actionListener;
     DemInterface* demObject;
     ModuleController* modules;
-    Graphics window;
-    Graphics* graphics;
+    Graphics window;    
 
 public:
     DefaultController();

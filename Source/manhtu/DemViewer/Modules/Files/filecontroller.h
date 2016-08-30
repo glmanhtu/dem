@@ -35,7 +35,7 @@ public:
 
     // ActionInterface interface
 public:
-    void setActionPerform(ActionListener *);
+    void setActionPerform(ActionListener *) override;
 };
 
 #endif // FILECONTROLLER_H

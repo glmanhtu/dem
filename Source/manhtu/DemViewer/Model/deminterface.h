@@ -21,8 +21,7 @@ public:
     virtual float minHeight() = 0;
     virtual float setMaxHeight(float max)=0;
     virtual float setMinHeight(float min)=0;
-    virtual float heightScale(float height) = 0;
-    virtual int getVertexPositionIn2D(int col, int row, bool northeast)=0;
+    virtual float heightScale(float height) = 0;    
     virtual Vertex* getArrayVertexs()=0;
     virtual int* getVertexIndices() = 0;
     virtual int countIndices()=0;

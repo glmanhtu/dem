@@ -4,8 +4,7 @@
 #include "View/graphicscomposite.h"
 class RotateGraphics : public GraphicsComposite
 {
-private:
-    const int GRAPHICS_ID = 3;
+private:    
     int xRot;
     int yRot;
     int zRot;

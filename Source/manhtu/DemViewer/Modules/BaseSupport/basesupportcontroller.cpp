@@ -47,7 +47,7 @@ void BaseSupportController::setGraphics(GraphicsComposite *)
 
 void BaseSupportController::generateBaseSupport()
 {
-    baseHeight = demObject->heightScale(demObject->minHeight() - 1000);
+    baseHeight = demObject->heightScale(demObject->minHeight() - 100);
     QVector3D normal;
     int step = demObject->getZoom();
     Vertex v1,v2,v3;

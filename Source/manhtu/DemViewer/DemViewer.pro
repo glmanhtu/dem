@@ -30,7 +30,9 @@ SOURCES += main.cpp\
     Modules/Rotate/rotategraphics.cpp \
     Modules/Rotate/rotatemodule.cpp \
     Modules/Zoom/zoommodule.cpp \
-    Modules/Zoom/zoomgraphics.cpp
+    Modules/Zoom/zoomgraphics.cpp \
+    Modules/Move/movemodule.cpp \
+    Modules/Move/movegraphics.cpp
 
 HEADERS  += \
     Controller/defaultcontroller.h \
@@ -54,9 +56,9 @@ HEADERS  += \
     Modules/Rotate/rotategraphics.h \
     Modules/Rotate/rotatemodule.h \
     Modules/Zoom/zoommodule.h \
-    Modules/Zoom/zoomgraphics.h
-
-FORMS    +=
+    Modules/Zoom/zoomgraphics.h \
+    Modules/Move/movemodule.h \
+    Modules/Move/movegraphics.h
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../../../../../usr/local/Cellar/gdal/1.11.3_1/lib/release/ -lgdal
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../../../../../usr/local/Cellar/gdal/1.11.3_1/lib/debug/ -lgdal

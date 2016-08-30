@@ -4,7 +4,7 @@
 
 DemObject::DemObject()
 {
-    zooomStep = 4;
+    zooomStep = 1;    
 }
 
 GDALDataset* DemObject::getDataSet()
@@ -17,9 +17,14 @@ void DemObject::setDataSet(GDALDataset *ds)
     dataSet = ds;    
     oriCols = dataSet->GetRasterXSize();
     oriRows = dataSet->GetRasterYSize();
-    readStep = (oriCols-1) / 1200;
+    readStep = oriCols/600;
+    if (readStep == 0) readStep = 1;
     cols = oriCols/readStep;
-    rows = oriRows/readStep;
+    rows = oriRows/readStep;    
+    if (readStep > 1) {
+        cols++;
+        rows++;
+    }
 }
 
 
@@ -59,11 +64,13 @@ float DemObject::minHeight()
 float DemObject::setMaxHeight(float max)
 {
     maxH = max;
+    return max;
 }
 
 float DemObject::setMinHeight(float min)
 {
     minH = min;
+    return min;
 }
 
 
@@ -71,32 +78,6 @@ float DemObject::heightScale(float height)
 {
     return height/6000;
 }
-
-int DemObject::getVertexPositionIn2D(int col, int row, bool northeast)
-{
-    col = col/zooomStep;
-    row = row/zooomStep;
-    int scaledCols = (cols - 1)/zooomStep;
-    int scaledRows = (rows - 1)/zooomStep;
-    int index = 0;
-    if (!northeast) {
-        if (row == scaledRows - 1) {
-            index = scaledRows*scaledCols*2-scaledCols + col;
-        } else {
-            index = (scaledCols + 2*(col + 1) -1) + row*scaledCols*2 -1;
-        }
-    }
-    else {
-        if (row == 0) {
-            index = col;
-        } else {
-            index = (scaledCols + 2*(col + 1) -1) + (row-1)*scaledCols*2;
-        }
-    }
-
-    return index*3;
-}
-
 
 Vertex *DemObject::getArrayVertexs()
 {
@@ -178,6 +159,7 @@ int DemObject::getVertexPosition(int x, int y)
     if (y > 1 && x > 0) {
         return y*scaledCols + y + x - 1;
     }
+    return 0;
 }
 
 
@@ -216,4 +198,5 @@ int DemObject::getVertexPosition(int x, int y, int layer, int direction)
     default:
         break;
     }
+    return 0;
 }

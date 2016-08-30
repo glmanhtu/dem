@@ -10,8 +10,6 @@ class ActionListener;
 using namespace std;
 class ActionInterface
 {
-private:
-    ActionListener* actionPerform;
 public:
     virtual void initAction() = 0;
     virtual void terminalAction() = 0;

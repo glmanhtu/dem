@@ -25,17 +25,16 @@ public:
     float minHeight() override;
     float setMaxHeight(float max) override;
     float setMinHeight(float min) override;
-    float heightScale(float height) override;
-    int getVertexPositionIn2D(int col, int row, bool northeast) override;
+    float heightScale(float height) override;    
     Vertex *getArrayVertexs() override;
     int countVertexs() override;
-    std::vector<float> readDem();
-    int getZoom();
-    void clean();
-    int getVertexPosition(int x, int y);
-    int *getVertexIndices();
-    int countIndices();
-    int getVertexPosition(int col, int row, int layer, int direction);
+    std::vector<float> readDem() override;
+    int getZoom() override;
+    void clean() override;
+    int getVertexPosition(int x, int y) override;
+    int *getVertexIndices() override;
+    int countIndices() override;
+    int getVertexPosition(int col, int row, int layer, int direction) override;
 };
 
 #endif // DEMOBJECT_H

@@ -21,6 +21,8 @@ public:
     void initializeGL();
     void paintGL();
     void resizeGL(int width, int height);
+    void changeZoom();
+    void wheelEvent(QWheelEvent *);
 };
 
 #endif // ZOOMGRAPHICS_H

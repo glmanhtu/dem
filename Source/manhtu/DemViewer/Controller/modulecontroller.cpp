@@ -4,9 +4,11 @@
 #include "Modules/BaseSupport/basesupportmodule.h"
 #include "Modules/Rotate/rotatemodule.h"
 #include "Modules/Zoom/zoommodule.h"
+#include "Modules/Move/movemodule.h"
 
 ModuleController::ModuleController()
 {
+    modules.push_back(new MoveModule());
     modules.push_back(new ZoomModule());
     modules.push_back(new RotateModule());
     modules.push_back(new ColorModule());
@@ -16,7 +18,7 @@ ModuleController::ModuleController()
 
 void ModuleController::loadModules()
 {
-    for (int i=0; i<modules.size(); i++) {
+    for (std::string::size_type i=0; i<modules.size(); i++) {
         if (modules[i]->hasAction()) {
             modules[i]->getAction()->setActionPerform(actions);
             registerAction(modules[i]->getAction());

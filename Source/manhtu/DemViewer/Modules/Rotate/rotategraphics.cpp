@@ -27,7 +27,7 @@ void RotateGraphics::mouseMoveEvent(QMouseEvent *event)
     lastPos = event->pos();
 }
 
-void RotateGraphics::mouseDoubleClickEvent(QMouseEvent *event)
+void RotateGraphics::mouseDoubleClickEvent(QMouseEvent *)
 {
 }
 
@@ -46,7 +46,7 @@ void RotateGraphics::paintGL()
     glRotatef(zRot / 16.0, 0.0, 0.0, 1.0);
 }
 
-void RotateGraphics::resizeGL(int width, int height)
+void RotateGraphics::resizeGL(int , int )
 {
 }
 

@@ -31,15 +31,24 @@ void GraphicsComposite::setSize(int width, int height)
     graphicsMain->setSize(width, height);
 }
 
-void GraphicsComposite::mousePressEvent(QMouseEvent *event)
+void GraphicsComposite::mousePressEvent(QMouseEvent *)
 {
 }
 
-void GraphicsComposite::mouseMoveEvent(QMouseEvent *event)
+void GraphicsComposite::mouseMoveEvent(QMouseEvent *)
 {
 }
 
-void GraphicsComposite::mouseDoubleClickEvent(QMouseEvent *event)
+void GraphicsComposite::mouseDoubleClickEvent(QMouseEvent *)
+{
+}
+
+void GraphicsComposite::mouseReleaseEvent(QMouseEvent *)
+{
+
+}
+
+void GraphicsComposite::wheelEvent(QWheelEvent *)
 {
 }
 
@@ -60,7 +69,7 @@ void GraphicsComposite::registerGraphics(GraphicsComposite* graphic)
     if (graphic->addToGraphicsComponent() == addToGraphicsComponent()) {
         graphics.push_back(graphic);
     } else {
-        for (int i=0; i<graphics.size(); i++) {
+        for (std::string::size_type i=0; i<graphics.size(); i++) {
             graphics[i]->registerGraphics(graphic);
         }
     }
@@ -76,7 +85,7 @@ bool GraphicsComposite::addMenu(QString menuName, QAction *action)
     /**
      * Check if menu already exists
     **/
-    for (int i=0; i<menus.size(); i++) {
+    for (std::string::size_type i=0; i<menus.size(); i++) {
         if (menus[i]->existsMenuName(menuName)) {
 
             if (menus[i]->existsActionName(action->text())) {
@@ -108,10 +117,10 @@ ActionInterface* GraphicsComposite::getAction(QString name)
 
 bool GraphicsComposite::registerMenu(QMenuBar * qMenuBar)
 {
-    for (int i=0; i<menus.size(); i++) {
+    for (std::string::size_type i=0; i<menus.size(); i++) {
         qMenuBar->addMenu(menus[i]->getMenu());
     }
-    for (int i=0; i<graphics.size(); i++)
+    for (std::string::size_type i=0; i<graphics.size(); i++)
     {
         graphics[i]->registerMenu(qMenuBar);
     }

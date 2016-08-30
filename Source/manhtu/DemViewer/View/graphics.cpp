@@ -1,7 +1,8 @@
 #include "View/graphics.h"
 #include <QMouseEvent>
 #include <QDebug>
-#include <QOpenGLShaderProgram>
+#include <QCoreApplication>
+
 
 QSize Graphics::getSize()
 {
@@ -32,8 +33,12 @@ void Graphics::setSize(int width, int height)
     }
     if (height < this->height()) {
         height = this->height();
-    }
-    setFixedSize(width, height);
+    }    
+    resize(width, height);
+    resizeGL(width, height);
+    update();
+    QResizeEvent *myResizeEvent = new QResizeEvent(getSize(), getSize());
+    QCoreApplication::postEvent(this, myResizeEvent);
 }
 
 void Graphics::initial()
@@ -49,7 +54,6 @@ void Graphics::initializeGL()
     glEnable(GL_DEPTH_TEST);    
     glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 
-
     glShadeModel(GL_SMOOTH);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
@@ -58,18 +62,11 @@ void Graphics::initializeGL()
     // set material properties which will be assigned by glColor
     glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 
-    // Create light components
-    float ambientLight[] = { 0.2f, 0.2f, 0.2f, 1.0f };
-    float diffuseLight[] = { 0.8f, 0.8f, 0.8, 1.0f };
-    float specularLight[] = { 0.5f, 0.5f, 0.5f, 1.0f };
-    float position[] = { -0.5f, 0.5f, 8.0f, 1.0f };
+    float position[] = { -0.5f, 0.5f, 1.0f, 1.0f };
 
     // Assign created components to GL_LIGHT0
-    glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, specularLight);
     glLightfv(GL_LIGHT0, GL_POSITION, position);
-    for(int i=0; i<graphics.size(); i++) {
+    for(std::string::size_type i=0; i<graphics.size(); i++) {
         graphics[i]->initializeGL();
     }
 
@@ -93,10 +90,9 @@ void Graphics::addVertex(Vertex vertex, int col, int row)
 void Graphics::paintGL()
 {
     glClearColor(0.0, 0.0, 0.0, 1.0);
-    glLoadIdentity();    
-    glTranslatef(0.0, 0.0, -10.0);       
+    glLoadIdentity();        
 
-    for(int i=0; i<graphics.size(); i++) {
+    for(std::string::size_type i=0; i<graphics.size(); i++) {
         graphics[i]->paintGL();
     }            
 
@@ -119,22 +115,13 @@ void Graphics::paintGL()
         glDisableClientState(GL_COLOR_ARRAY);
         glDisableClientState(GL_VERTEX_ARRAY);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);        
     }
 }
 
 void Graphics::resizeGL(int width, int height)
-{
-    int side = qMin(width, height);
-    glViewport((width - side) / 2, (height - side) / 2, side, side);
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    float aspectRatio = (float)width/(float)height;
-    glOrtho(-aspectRatio, aspectRatio, -1, 1, 1.0, 15.0);
-    glMatrixMode(GL_MODELVIEW);
-
-    for(int i=0; i<graphics.size(); i++) {
+{    
+    for(std::string::size_type i=0; i<graphics.size(); i++) {
         graphics[i]->resizeGL(width, height);
     }
 }
@@ -151,21 +138,21 @@ QSize Graphics::sizeHint() const
 
 void Graphics::mousePressEvent(QMouseEvent *event)
 {
-    for(int i=0; i<graphics.size(); i++) {
+    for(std::string::size_type i=0; i<graphics.size(); i++) {
         graphics[i]->mousePressEvent(event);
     }    
 }
 
 void Graphics::mouseMoveEvent(QMouseEvent *event)
 {
-    for(int i=0; i<graphics.size(); i++) {
+    for(std::string::size_type i=0; i<graphics.size(); i++) {
         graphics[i]->mouseMoveEvent(event);
     }        
 }
 
 void Graphics::mouseDoubleClickEvent(QMouseEvent *e)
 {
-    for(int i=0; i<graphics.size(); i++) {
+    for(std::string::size_type i=0; i<graphics.size(); i++) {
         graphics[i]->mouseDoubleClickEvent(e);
     }    
 }
@@ -173,4 +160,21 @@ void Graphics::mouseDoubleClickEvent(QMouseEvent *e)
 Graphics::~Graphics()
 {
     glDeleteBuffers(1, &vbo);
+    glDeleteBuffers(1, &ibo);
+}
+
+
+void Graphics::wheelEvent(QWheelEvent *event)
+{
+    for(std::string::size_type i=0; i<graphics.size(); i++) {
+        graphics[i]->wheelEvent(event);
+    }
+}
+
+
+void Graphics::mouseReleaseEvent(QMouseEvent *e)
+{
+    for(std::string::size_type i=0; i<graphics.size(); i++) {
+        graphics[i]->mouseReleaseEvent(e);
+    }
 }

@@ -34,6 +34,8 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseDoubleClickEvent(QMouseEvent *event) override;
+    void wheelEvent(QWheelEvent *);
+    void mouseReleaseEvent(QMouseEvent *);
 };
 
 #endif // GRAPHICS_H

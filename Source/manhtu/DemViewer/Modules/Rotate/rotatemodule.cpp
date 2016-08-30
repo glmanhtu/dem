@@ -23,6 +23,7 @@ bool RotateModule::hasAction()
 
 ActionInterface *RotateModule::getAction()
 {    
+    return NULL;
 }
 
 bool RotateModule::loadOnBoot()

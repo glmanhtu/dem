@@ -116,7 +116,7 @@ void FileGraphics::paintGL()
 {            
 
 }
-void FileGraphics::resizeGL(int width, int height)
+void FileGraphics::resizeGL(int , int )
 {
 
 }
