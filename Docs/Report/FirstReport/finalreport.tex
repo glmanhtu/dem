@@ -295,12 +295,12 @@ The software engineering project is scheduled with milestones:
 \par\noindent The following figures of Task list and Gantt chart shows how the project is controlled and tasks are organized in the team.
 \begin{figure}[H] 
   \makebox[\textwidth]{\includegraphics[width=0.6\paperwidth]{Tasks.png}}
-  \label{fig:gantt1}
+  \label{fig:Tasks}
 \end{figure}
 
 \begin{figure}[H] 
   \makebox[\textwidth]{\includegraphics[width=0.9\paperwidth]{Gantt.png}}
-  \label{fig:gantt2}
+  \label{fig:Gantt}
 \end{figure} 
 
 \section{Implementation}
@@ -362,7 +362,7 @@ public:
 };
 \end{lstlisting}
 
-Abstract Graphics Composite provides basic functions for module to interact with system. For example, to create new menu, module only call 
+Abstract Graphics Composite provides basic functions for the module to interact with system. For example, to create new menu, the module only calls: 
 bool addMenu(QString menuName, QAction *action);  
 
 Similarly, if using Action, it is needed to inherit from Action Interface and declare in the system.
@@ -390,12 +390,15 @@ For modules using DEM data, they must have Action. In Action, it must register t
 \subsection{Modules} 
 \begin{itemize}
 \item a. Module Files:
-Module Files create menu to choose DEM file, read DEM file and generate mesh.
-It uses GDAL library to read DEM file into Raster data
+Module Files creates a menu to choose DEM file, read DEM file and generate mesh.
+It uses GDAL library to read DEM file into Raster data.
 Raster data is an array of float type which contains height data of each pixel. Based on Raster data and number of cols, rows of DEM file, there is a 2-dimensions array.
 
-From here, 2-dimensions array's data is changed to Frame of reference of OpenGL with center is original coordinate.
-
+From here, 2-dimensions array's data is changed to Frame of reference of OpenGL with center is base coordinate.
+\begin{figure}[H] 
+  \makebox[\textwidth]{\includegraphics[width=0.5\paperwidth]{Base.png}}
+  \label{fig:Base}
+\end{figure} 
 Calculate x,y coordinates from 2-dimensions array into frame of reference of OpenGL:
 
 NewX = (X – CenterX)/CenterX
@@ -418,13 +421,75 @@ For Z (height) dimension, the height in 2-dimensions is between -11000 to 9000. 
 
 NewZ = Data2D[X,Y]/6000;
 
-After identifying coordinates in frame of reference of OpenGL, 3D-interpolating by using triangle.
+After identifying coordinates in frame of reference of OpenGL, 3D-interpolating by using triangle:
 
-\item b.  Color Module:
-Create color bands based on height of terrain.Files module use these color bands to color for mesh.
-\item c.  Base Support Module:
-Create a frame around mesh
+From each point (x,y), find 4 next points: [(y+1, x), (y, x +1)] and [(y-1, x), (y, x-1)] which create 2 triangles, continue for all points in the array.
 
+Identify normal vector: 
+Normal vector is used to identify the direction of light source illuminating the terrain. Based on it, identify dark or light points in the terrain.
+
+It is needed to identify normal vector for each vertex in mesh. When calculate 3 points  to draw a triangle, normal vector of that triangle. This vector normal will be assigned to vertices of triangle.
+When 2 triangles have the same vertex, normal vector of that vertex is the combination of normal vectors of 2 triangles.
+\begin{lstlisting}[breaklines=true]
+void DemObject::addVertex(Vertex vertex, int position)
+{
+    int currentPosition = vertexs.size() - 1;
+    if (position > currentPosition) {
+        vertexs.push_back(vertex);        
+    } else {
+        vertexs[position].setNormal(QVector3D::normal(vertex.normal(), vertexs[position].normal()));
+    }
+    ind.push_back(position);
+}
+\end{lstlisting}
+
+\item b. Color Module:
+Create color bands based on height of terrain. Files module use these color bands to color for mesh.
+\begin{figure}[H] 
+  \makebox[\textwidth]{\includegraphics[width=0.2\paperwidth]{color.png}}
+  \label{fig:Color}
+\end{figure}
+Source: \url{http://noaa.maps.arcgis.com/home/item.html?id=feb3c625dc094112bb5281c17679c769} 
+Each vertex has its height. This Map of height indicates the height by color.
+
+\item c. Base Support Module:
+Create a frame around the mesh.
+Find all vertices in directions: left, right, bottom \& top of mesh. Based on those vertices, draw a triangle to the point having the same coordinate but height = min(height) - 100
+
+\item d. Rotate Module:
+Rotate module catchs right-click and mouse movement, identify from/to points to rotate:
+
+glRotatef of OpenGL is used to rotate
+\begin{lstlisting}
+glRotatef(xRot / 16.0, 1.0, 0.0, 0.0);
+    	glRotatef(yRot / 16.0, 0.0, 1.0, 0.0);
+    glRotatef(zRot / 16.0, 0.0, 0.0, 1.0);
+\end{lstlisting}
+
+\item e. Zoom Module:
+Zoom module catchs scroll event of mouse to increase or decrease zoom level.
+glOtho and glViewport functions are used to zoom
+\begin{lstlisting}[breaklines=true]
+int side = qMin(width, height);
+glViewport(((width - side) / 2)*zoomByScale,((height - side) / 2)*zoomByScale, side*zoomByScale, side*zoomByScale);
+glMatrixMode(GL_PROJECTION);
+glLoadIdentity();
+float aspectRatio = (float)width/(float)height;
+glOrtho(-aspectRatio*zoomByScale, aspectRatio*zoomByScale, -1*zoomByScale, 1*zoomByScale, 1.0, 15.0);
+glMatrixMode(GL_MODELVIEW);
+\end{lstlisting}
+
+\item f. Move Module:
+Move module catchs left-click event and movement of mouse to identify the direction and distance.
+\begin{lstlisting}
+int distanceX = event->x() - lastPos.x();
+        int distanceY = event->y() - lastPos.y();
+        if (abs(distanceX) < abs(distanceY)) {
+            y -= distanceY * 0.0001;
+        } else {
+            x += distanceX * 0.0001;
+        }
+\end{lstlisting}
 \end{itemize}
 
 \section{Bibliography}
