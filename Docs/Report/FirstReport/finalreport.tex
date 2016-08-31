@@ -290,17 +290,17 @@ The software engineering project is scheduled with milestones:
 \end{itemize}
 \begin{figure}[H] 
   \includegraphics[width=\linewidth]{P3.jpg}
-  \label{fig:wmodel}
+  \caption {Development Model} 
 \end{figure}
 \par\noindent The following figures of Task list and Gantt chart shows how the project is controlled and tasks are organized in the team.
 \begin{figure}[H] 
-  \makebox[\textwidth]{\includegraphics[width=0.6\paperwidth]{Tasks.png}}
-  \label{fig:Tasks}
+  \makebox[\textwidth]{\includegraphics[width=0.9\paperwidth]{Tasks.png}}
+  \caption {Task Assignments} 
 \end{figure}
 
 \begin{figure}[H] 
   \makebox[\textwidth]{\includegraphics[width=0.9\paperwidth]{Gantt.png}}
-  \label{fig:Gantt}
+  \caption {Gantt Chart} 
 \end{figure} 
 
 \section{Implementation}
@@ -397,7 +397,7 @@ Raster data is an array of float type which contains height data of each pixel. 
 From here, 2-dimensions array's data is changed to Frame of reference of OpenGL with center is base coordinate.
 \begin{figure}[H] 
   \makebox[\textwidth]{\includegraphics[width=0.5\paperwidth]{Base.png}}
-  \label{fig:Base}
+  \caption {Coordinates Chart} 
 \end{figure} 
 Calculate x,y coordinates from 2-dimensions array into frame of reference of OpenGL:
 
@@ -447,9 +447,9 @@ void DemObject::addVertex(Vertex vertex, int position)
 Create color bands based on height of terrain. Files module use these color bands to color for mesh.
 \begin{figure}[H] 
   \makebox[\textwidth]{\includegraphics[width=0.2\paperwidth]{color.png}}
-  \label{fig:Color}
+  \caption{Elevation/depth in meters}
 \end{figure}
-Source: \url{http://noaa.maps.arcgis.com/home/item.html?id=feb3c625dc094112bb5281c17679c769} 
+The figure is from www.arcgis.com. \footnote{\url{http://gis.ngdc.noaa.gov/viewers/images/dem_color_scale.png}}
 Each vertex has its height. This Map of height indicates the height by color.
 
 \item c. Base Support Module:
@@ -491,7 +491,28 @@ int distanceX = event->x() - lastPos.x();
         }
 \end{lstlisting}
 \end{itemize}
+\subsection{Demos} 
+\begin{itemize}
+\item a. Overview:
+\begin{figure}[H] 
+  \makebox[\textwidth]{\includegraphics[width=0.9\paperwidth]{Overview.png}}
+  \caption{After drawing the terrain}
+\end{figure}
+\item b. Basement:
+\begin{figure}[H] 
+  \makebox[\textwidth]{\includegraphics[width=0.9\paperwidth]{BaseDemo.png}}
+  \caption{After drawing basement for terrain}
+\end{figure}
+\begin{figure}[H] 
+  \makebox[\textwidth]{\includegraphics[width=0.9\paperwidth]{Rotate.png}}
+  \caption{When rotating the terrain}
+\end{figure}
+\begin{figure}[H] 
+  \makebox[\textwidth]{\includegraphics[width=0.9\paperwidth]{Zoom.png}}
+  \caption{Zoom in the terrain}
+\end{figure}
 
+\end{itemize}
 \section{Bibliography}
 \begin{enumerate}[{(1)}]
 
